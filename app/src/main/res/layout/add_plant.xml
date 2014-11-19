@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/add_plant_container"
+    >
+
+
+    <View
+        android:id="@+id/headerBkgaddPlant"
+        android:layout_width="match_parent"
+        android:background="#466E8F"
+        android:layout_height="80dp" />
+
+    <TextView
+        android:id="@+id/headerBkgaddPlant_Text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="add a plant"
+        android:textColor="#FFFFFF"
+        android:layout_alignBottom="@+id/headerBkgaddPlant"
+        android:layout_alignParentEnd="true"
+        android:textSize="30dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginBottom="10dp" />
+
+    <View
+        android:id="@+id/headerBkgaddPlant_border1"
+        android:layout_width="match_parent"
+        android:background="#75B8EF"
+        android:layout_height="10dp"
+        android:layout_below="@+id/headerBkgaddPlant"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/headerBkgaddPlant_border2"
+        android:layout_width="match_parent"
+        android:background="#E0DCDA"
+        android:layout_height="10dp"
+        android:layout_below="@+id/headerBkgaddPlant_border1"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/plantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Plant Name"
+        android:layout_below="@+id/headerBkgaddPlant_border2"
+        android:layout_alignParentStart="true"
+        android:textColor="#122A3A"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp" />
+
+    <EditText
+        android:id="@+id/plantType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_toStartOf="@+id/headerBkgaddPlant_Text2"
+        android:singleLine="false"
+        android:textColor="#122A3A"
+        android:background="#75B8EF"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/plantName"
+        android:layout_alignStart="@+id/plantName" />
+
+    <Button
+        android:id="@+id/savePlant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/plantType"
+        android:text="Write Text into File"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:id="@+id/readPlant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/savePlant"
+        android:text="Read Text From file"
+        android:layout_margin="5dp" />
+</RelativeLayout>

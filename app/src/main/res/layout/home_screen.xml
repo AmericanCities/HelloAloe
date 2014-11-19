@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/container"
+    >
+
+
+ <View
+     android:id="@+id/headerBkg"
+     android:layout_width="match_parent"
+     android:background="#75B8EF"
+     android:layout_height="80dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Hello Aloe"
+        android:textColor="#FFFFFF"
+        android:id="@+id/headerText2"
+        android:layout_alignBottom="@+id/headerBkg"
+        android:layout_alignParentEnd="true"
+        android:textSize="30dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginBottom="10dp" />
+
+    <View
+        android:id="@+id/headerBkg_border1"
+        android:layout_width="match_parent"
+        android:background="#466E8F"
+        android:layout_height="10dp"
+        android:layout_below="@+id/headerBkg"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/headerBkg_border2"
+        android:layout_width="match_parent"
+        android:background="#E0DCDA"
+        android:layout_height="10dp"
+        android:layout_below="@+id/headerBkg_border1"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/container2"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:layout_alignEnd="@+id/directions_txt"
+        android:layout_below="@+id/headerBkg_border2"
+        android:background="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/header_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/aloelogo"
+        android:layout_alignBottom="@+id/headerBkg_border2"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-15dp"
+        android:layout_marginTop="5dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addPlantbtn"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/add_plant_button"
+        android:layout_below="@+id/headerBkg_border2"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:background="#ffffffff"
+        android:adjustViewBounds="false"
+        android:clickable="true" />
+
+    <TextView
+        android:text="add a plant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/addPlant_btn_text"
+        android:layout_toStartOf="@+id/directions_txt"
+        android:layout_toEndOf="@+id/header_logo"
+        android:textColor="#122A3A"
+        android:layout_alignBottom="@+id/addPlantbtn"
+        android:layout_alignTop="@+id/addPlantbtn"
+        android:layout_marginLeft="-24dp"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Add your house plant and activate  the Hello Aloe widget to be reminded to water your plants"
+        android:id="@+id/directions_txt"
+        android:layout_toEndOf="@+id/addPlantbtn"
+        android:layout_alignBottom="@+id/addPlantbtn"
+        android:layout_alignStart="@+id/headerText2"
+        android:layout_alignParentEnd="true"
+        android:textColor="#122A3A"
+        android:layout_alignTop="@+id/addPlantbtn" />
+
+    <View
+        android:id="@+id/headerBkg_border3"
+        android:layout_width="match_parent"
+        android:background="#466E8F"
+        android:layout_height="30dp"
+        android:layout_below="@+id/container2"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/headerBkg_border4"
+        android:layout_width="match_parent"
+        android:background="#9B6F4E"
+        android:layout_height="10dp"
+        android:layout_below="@+id/headerBkg_border3"
+        android:layout_alignParentStart="true" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Your plants"
+        android:id="@+id/listView_title"
+        android:layout_alignStart="@+id/addPlantbtn"
+        android:textColor="#FFFFFF"
+        android:layout_alignBottom="@+id/headerBkg_border3"
+        android:layout_toStartOf="@+id/addPlant_btn_text"
+        android:layout_alignTop="@+id/headerBkg_border3"
+        android:textSize="18dp"
+        android:layout_alignEnd="@+id/addPlantbtn"
+        android:gravity="center_vertical" />
+
+
+</RelativeLayout>
