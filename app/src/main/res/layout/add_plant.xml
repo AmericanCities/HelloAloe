@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/add_plant_container"
-    >
-
+    android:clickable="false">
 
     <View
         android:id="@+id/headerBkgaddPlant"
@@ -16,11 +15,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="add a plant"
+        android:text="@string/addScreenHeadTxt"
         android:textColor="#FFFFFF"
-        android:layout_alignBottom="@+id/headerBkgaddPlant"
+        android:layout_alignBottom="@id/headerBkgaddPlant"
         android:layout_alignParentEnd="true"
-        android:textSize="30dp"
+        android:textSize="38sp"
         android:layout_marginRight="36dp"
         android:layout_marginBottom="10dp" />
 
@@ -28,8 +27,8 @@
         android:id="@+id/headerBkgaddPlant_border1"
         android:layout_width="match_parent"
         android:background="#75B8EF"
-        android:layout_height="10dp"
-        android:layout_below="@+id/headerBkgaddPlant"
+        android:layout_height="15dp"
+        android:layout_below="@id/headerBkgaddPlant"
         android:layout_alignParentStart="true" />
 
     <View
@@ -37,51 +36,131 @@
         android:layout_width="match_parent"
         android:background="#E0DCDA"
         android:layout_height="10dp"
-        android:layout_below="@+id/headerBkgaddPlant_border1"
+        android:layout_below="@id/headerBkgaddPlant_border1"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:id="@+id/plantName"
+    <ImageView
+        android:id="@+id/header_logo"
+        android:src="@drawable/addplantlogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Plant Name"
-        android:layout_below="@+id/headerBkgaddPlant_border2"
+        android:layout_alignBottom="@id/headerBkgaddPlant_border2"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="-15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="15dp" />
+
+
+    <TextView
+        android:id="@+id/plantTypeDsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/plant_type_dsc"
         android:textColor="#122A3A"
-        android:textSize="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp" />
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="8dp"
+        android:layout_below="@id/headerBkgaddPlant_border2"/>
 
     <EditText
         android:id="@+id/plantType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_toStartOf="@+id/headerBkgaddPlant_Text2"
-        android:singleLine="false"
+        android:singleLine="true"
         android:textColor="#122A3A"
         android:background="#75B8EF"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/plantName"
-        android:layout_alignStart="@+id/plantName" />
+        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/plantTypeDsc"
+        android:layout_alignStart="@id/plantTypeDsc" />
+
+
+    <TextView
+        android:id="@+id/plantNickNameDsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/plant_nickName_dsc"
+        android:textColor="#122A3A"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/plantType"
+        android:layout_marginLeft="8dp"/>
+
+    <EditText
+        android:id="@+id/plantNickName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:singleLine="true"
+        android:textColor="#122A3A"
+        android:background="#75B8EF"
+        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/plantNickNameDsc"
+        android:layout_alignStart="@id/plantTypeDsc" />
+
+    <TextView
+        android:id="@+id/plantSchedDsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/waterSchedule_dsc"
+        android:textColor="#122A3A"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/plantNickName"
+        android:layout_marginLeft="8dp"/>
+
+    <EditText
+        android:id="@+id/plantSched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:singleLine="true"
+        android:textColor="#122A3A"
+        android:background="#75B8EF"
+        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/plantSchedDsc"
+        android:layout_alignStart="@id/plantTypeDsc" />
+
+    <TextView
+        android:id="@+id/lastDateDsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/last_date_dsc"
+        android:textColor="#122A3A"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/plantSched"
+        android:layout_marginLeft="8dp"/>
+
+    <Button
+        android:id="@+id/takePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take a photo of your plant"
+        android:layout_below="@+id/datePicker"
+        android:layout_alignEnd="@+id/lastDateDsc" />
 
     <Button
         android:id="@+id/savePlant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/plantType"
-        android:text="Write Text into File"
-        android:layout_margin="5dp"/>
+        android:text="Add Plant"
+        android:layout_toStartOf="@+id/headerBkgaddPlant_Text2"
+        android:layout_below="@+id/datePicker"
+        android:layout_alignStart="@+id/header_logo" />
 
-    <Button
-        android:id="@+id/readPlant"
+    <DatePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/savePlant"
-        android:text="Read Text From file"
-        android:layout_margin="5dp" />
+        android:id="@+id/datePicker"
+        android:layout_below="@+id/lastDateDsc"
+        android:layout_alignStart="@+id/lastDateDsc" />
+
 </RelativeLayout>

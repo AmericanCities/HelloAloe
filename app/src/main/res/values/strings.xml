@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Hello Aloe</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="addNewPlant">Click to add a new plant</string>
+    <string name ="directions">Add your house plant and activate  the Hello Aloe widget to be reminded to water your plants</string>
+    <string name ="listViewHeader">Your Plants</string>
+    <string name="homeScreenHeader">Hello Aloe</string>
+    <string name ="addScreenHeadTxt">add a plant</string>
+    <string name="plant_type_dsc">What kind of plant do you have?</string>
+    <string name="plant_nickName_dsc">Do you have a name for your plant?  If so add it here, but it’s not required.</string>
+    <string name="waterSchedule_dsc">Enter how days this plant should be watered (choose 7 for once a week).</string>
+    <string name="last_date_dsc">When did you last water your plant?</string>
 </resources>

@@ -1,7 +1,6 @@
 package heering.helloaloe;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 
 public class HomeScreen extends Activity implements View.OnClickListener {
@@ -26,7 +23,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        ImageButton addPlant = (ImageButton)findViewById(R.id.addPlantbtn);
+        Button addPlant = (Button)findViewById(R.id.addPlantbtn);
         if (addPlant != null)
             addPlant.setOnClickListener(this);
     }
@@ -71,7 +68,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.plants_listview, container, false);
+            View rootView = inflater.inflate(R.layout.plants_listview,container,false);
             return rootView;
         }
     }
