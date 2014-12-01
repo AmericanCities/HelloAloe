@@ -12,4 +12,5 @@
     <string name="plant_nickName_dsc">Do you have a name for your plant?  If so add it here, but it’s not required.</string>
     <string name="waterSchedule_dsc">Enter how days this plant should be watered (choose 7 for once a week).</string>
     <string name="last_date_dsc">When did you last water your plant?</string>
+    <string name="nicknameHint">Your coleus looks like a Bobby</string>
 </resources>

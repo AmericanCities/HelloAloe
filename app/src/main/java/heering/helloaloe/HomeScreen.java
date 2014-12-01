@@ -1,31 +1,48 @@
 package heering.helloaloe;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class HomeScreen extends Activity implements View.OnClickListener {
 
+    private static final String LOGTAG = "USERPLANTS";
+    PlantDataSource datasource;
+    public static ArrayList plantItems;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(LOGTAG,"And we are off and running");
+
         setContentView(R.layout.home_screen);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+
         Button addPlant = (Button)findViewById(R.id.addPlantbtn);
         if (addPlant != null)
             addPlant.setOnClickListener(this);
+
+        datasource = new PlantDataSource(this);
+        datasource.open();
+        plantItems = datasource.getListItems();
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container3, new PlantListFragment())
+                    .commit();
+        }
+
     }
 
     public void onClick(View selectedView){
@@ -57,19 +74,35 @@ public class HomeScreen extends Activity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlantListFragment extends ListFragment {
 
-        public PlaceholderFragment() {
+        //@Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            // initialize and set the list adapter
+            Log.i(LOGTAG,"There are " + plantItems.size() + " items");
+            setListAdapter(new ListViewPlantAdapter(getActivity(), plantItems));
+        }
+
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            // remove the dividers from the ListView of the ListFragment
+            getListView().setDivider(null);
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.plants_listview,container,false);
-            return rootView;
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            // retrieve theListView item
+            ListViewItem item = (ListViewItem) plantItems.get(position);
+
+            // do something
+            Toast.makeText(getActivity(), item.plantType, Toast.LENGTH_SHORT).show();
         }
     }
 }

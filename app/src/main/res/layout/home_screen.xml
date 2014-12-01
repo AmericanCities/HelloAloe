@@ -137,11 +137,11 @@
         android:textSize="18sp"
         android:gravity="center_vertical|center_horizontal" />
 
-    <View
+    <FrameLayout
         android:id="@+id/container3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/headerBkg_border4"
-        android:background="#FFFFFF"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/headerBkg_border4"
+        android:layout_alignParentStart="true"></FrameLayout>
 
 </RelativeLayout>

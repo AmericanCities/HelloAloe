@@ -8,7 +8,7 @@ public class Plant {
     private long plantID;
     private String plantType;
     private String plantNickName;
-    private String plantSchedule;
+    private int plantSchedule;
     private String plantLastWatered;
     private String plantImage;
 
@@ -44,11 +44,11 @@ public class Plant {
         this.plantNickName = plantNickName;
     }
 
-    public String getPlantSchedule() {
+    public int getPlantSchedule() {
         return plantSchedule;
     }
 
-    public void setPlantSchedule(String plantSchedule) {
+    public void setPlantSchedule(int plantSchedule) {
         this.plantSchedule = plantSchedule;
     }
 

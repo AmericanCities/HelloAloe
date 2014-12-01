@@ -94,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:hint="@string/nicknameHint"
         android:singleLine="true"
         android:textColor="#122A3A"
         android:background="#75B8EF"
@@ -139,28 +140,39 @@
         android:layout_below="@id/plantSched"
         android:layout_marginLeft="8dp"/>
 
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lastDateDsc"
+        android:layout_alignStart="@id/lastDateDsc"/>
+
     <Button
         android:id="@+id/takePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take a photo of your plant"
-        android:layout_below="@+id/datePicker"
-        android:layout_alignEnd="@+id/lastDateDsc" />
+        android:text="Take photo of plant"
+        android:layout_below="@id/datePicker"
+        android:layout_alignEnd="@id/lastDateDsc" />
 
     <Button
         android:id="@+id/savePlant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Plant"
-        android:layout_toStartOf="@+id/headerBkgaddPlant_Text2"
-        android:layout_below="@+id/datePicker"
-        android:layout_alignStart="@+id/header_logo" />
+        android:text="Save Plant"
+        android:layout_toStartOf="@id/headerBkgaddPlant_Text2"
+        android:layout_below="@id/datePicker"
+        android:layout_alignStart="@id/header_logo" />
 
-    <DatePicker
+
+   <!-- <ImageView
+        android:id="@+id/cameraShot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
-        android:layout_below="@+id/lastDateDsc"
-        android:layout_alignStart="@+id/lastDateDsc" />
+        android:layout_toEndOf="@id/datePicker"
+        android:layout_alignBottom="@id/datePicker"
+        android:layout_alignEnd="@id/takePicture"
+        android:layout_below="@+id/lastDateDsc" / -->
 
 </RelativeLayout>
