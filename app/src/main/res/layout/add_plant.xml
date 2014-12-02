@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:id="@+id/add_plant_container"
     android:clickable="false">
 
@@ -50,7 +51,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="15dp" />
 
-
     <TextView
         android:id="@+id/plantTypeDsc"
         android:layout_width="wrap_content"
@@ -73,7 +73,8 @@
         android:background="#75B8EF"
         android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
         android:layout_below="@id/plantTypeDsc"
-        android:layout_alignStart="@id/plantTypeDsc" />
+        android:layout_alignStart="@id/plantTypeDsc"
+        android:hint="@string/plantNameHint"/>
 
 
     <TextView
@@ -111,21 +112,9 @@
         android:textSize="18sp"
         android:layout_marginTop="15dp"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
         android:layout_below="@id/plantNickName"
-        android:layout_marginLeft="8dp"/>
-
-    <EditText
-        android:id="@+id/plantSched"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:singleLine="true"
-        android:textColor="#122A3A"
-        android:background="#75B8EF"
-        android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
-        android:layout_below="@id/plantSchedDsc"
-        android:layout_alignStart="@id/plantTypeDsc" />
+        android:layout_marginLeft="8dp"
+        android:layout_alignEnd="@+id/savePlant" />
 
     <TextView
         android:id="@+id/lastDateDsc"
@@ -137,42 +126,76 @@
         android:layout_marginTop="15dp"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@id/headerBkgaddPlant_Text2"
-        android:layout_below="@id/plantSched"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginLeft="8dp"
+        android:layout_below="@id/plantSchedDsc" />
 
 
-    <DatePicker
-        android:id="@+id/datePicker"
+    <!--  <DatePicker
+         android:id="@+id/datePicker"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/lastDateDsc"
+         android:layout_alignStart="@id/lastDateDsc"/>-->
+
+
+    <Button
+        android:id="@+id/dateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lastDateDsc"
-        android:layout_alignStart="@id/lastDateDsc"/>
+        android:text="select a date"/>
 
-    <Button
-        android:id="@+id/takePicture"
+     <Button
+         android:id="@+id/takePicture"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Take photo of plant"
+         android:layout_below="@id/lastDateDsc"
+         android:layout_alignEnd="@id/lastDateDsc" />
+
+     <Button
+         android:id="@+id/savePlant"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Save Plant"
+         android:layout_toStartOf="@id/headerBkgaddPlant_Text2"
+         android:layout_below="@id/dateButton"
+         android:layout_alignStart="@id/header_logo" />
+
+     <NumberPicker
+         android:id="@+id/schdulePicker"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_toEndOf="@id/plantSchedDsc"
+         android:layout_toStartOf="@id/schdulePicker"
+         android:layout_alignTop="@id/plantSchedDsc" />
+
+     <TextView
+         android:id="@+id/scheduleResult"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:attr/textAppearanceLarge"
+         android:layout_alignTop="@id/schdulePicker"
+         android:layout_toEndOf="@id/schdulePicker"
+         android:layout_above="@id/lastDateDsc" />
+
+    <TextView
+        android:id="@+id/displayDPdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take photo of plant"
-        android:layout_below="@id/datePicker"
-        android:layout_alignEnd="@id/lastDateDsc" />
-
-    <Button
-        android:id="@+id/savePlant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Plant"
-        android:layout_toStartOf="@id/headerBkgaddPlant_Text2"
-        android:layout_below="@id/datePicker"
-        android:layout_alignStart="@id/header_logo" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_below="@id/lastDateDsc"
+        android:layout_toEndOf="@id/dateButton"
+        android:layout_alignBottom="@id/dateButton" />
 
 
-   <!-- <ImageView
-        android:id="@+id/cameraShot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/datePicker"
-        android:layout_alignBottom="@id/datePicker"
-        android:layout_alignEnd="@id/takePicture"
-        android:layout_below="@+id/lastDateDsc" / -->
+     <ImageView
+         android:id="@+id/cameraShot"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_toEndOf="@id/displayDPdate"
+         android:layout_alignBottom="@id/displayDPdate"
+         android:layout_alignEnd="@id/takePicture"
+         android:layout_below="@+id/lastDateDsc" />
 
 </RelativeLayout>
