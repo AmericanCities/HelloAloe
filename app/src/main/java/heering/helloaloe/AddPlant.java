@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -25,17 +22,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by Matthew on 11/19/2014.
+ *
+ * This section allows a user to add a plant
+ *
  */
 public class AddPlant extends Activity implements View.OnClickListener {
 
@@ -47,7 +44,6 @@ public class AddPlant extends Activity implements View.OnClickListener {
     public TextView displayDPfDate;
     public PlantDataSource datasource;
     public String filename;
-    public ImageView cameraShot;
 
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -57,10 +53,10 @@ public class AddPlant extends Activity implements View.OnClickListener {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Create View variables
-        plantTypeTXTMSG = (EditText) findViewById(R.id.plantType);
-        plantTypeTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE);  //add done to keyboard
-        plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickName);
-        plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
+          plantTypeTXTMSG = (EditText) findViewById(R.id.plantTypeTXTMSG);
+          plantTypeTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE);  //add done to keyboard
+          plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickNameET);
+          plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
        // DatePicker plantLastWateredDP = (DatePicker)(findViewById(R.id.datePicker));
 
         // number picker limits
@@ -74,7 +70,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
 
     private void addButtonListeners() {
 
-        Button datePickerBtn = (Button)findViewById(R.id.dateButton);
+        TextView datePickerBtn = (TextView)findViewById(R.id.displayDPdate);
         if (datePickerBtn !=null) {
             datePickerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,7 +82,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
             });
         }
 
-        Button takePicture = (Button)findViewById(R.id.takePicture);
+        ImageView takePicture = (ImageView)findViewById(R.id.takePicture);
         if (takePicture != null)
             takePicture.setOnClickListener(this);
 
@@ -100,7 +96,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal)
             {
                 plantSchedTV = (TextView) findViewById(R.id.scheduleResult);
-                plantSchedTV.setText(new Integer(newVal).toString());
+                plantSchedTV.setText(Integer.toString(newVal));
             }
         });
     }
@@ -155,7 +151,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             filename=saveToInternalSorage(imageBitmap);
-            ImageView cameraShot = (ImageView) findViewById(R.id.cameraShot);
+            ImageView cameraShot = (ImageView) findViewById(R.id.takePicture);
             cameraShot.setImageURI(Uri.parse(filename));
 
         }}
@@ -169,7 +165,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String imageFileName = "JPEG_" + timeStamp + ".jpg";
             File myPath = new File(directory,imageFileName);
-            FileOutputStream fos = null;
+            FileOutputStream fos;
             try {
                 fos = new FileOutputStream(myPath);
 
@@ -181,8 +177,6 @@ public class AddPlant extends Activity implements View.OnClickListener {
             }
             return (directory.getAbsolutePath() +"/" +imageFileName);
     }
-
-
 
 
     public static class DatePickerFragment extends DialogFragment

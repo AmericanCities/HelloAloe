@@ -10,8 +10,8 @@
     <string name ="addScreenHeadTxt">add a plant</string>
     <string name="plant_type_dsc">What kind of plant do you have?</string>
     <string name="plant_nickName_dsc">Do you have a name for your plant?  If so add it here, but it’s not required.</string>
-    <string name="waterSchedule_dsc">Enter how days this plant should be watered (choose 7 for once a week).</string>
-    <string name="last_date_dsc">When did you last water your plant?</string>
+    <string name="waterSchedule_dsc">Water Frequency</string>
+    <string name="last_date_dsc">last watered</string>
     <string name="plantNameHint">enter plant type</string>
-    <string name="nicknameHint">Your cactus looks like a Bobby</string>
+    <string name="nicknameHint">plant name</string>
 </resources>
