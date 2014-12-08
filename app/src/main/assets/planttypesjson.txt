@@ -1,0 +1,79 @@
+"plants" :[
+   {
+     "plant_type":"Peace Lily",
+     "light":"moderate to bright",
+     "soil":"peat moss-based potting-mix",
+     "water_schedule":7,
+     "notes":"Soil should be moist. Drench and dry.  Wait for plant to droop"
+   },
+   {
+     "plant_type":"Aloe Vera",
+     "light":"Bright Light",
+     "soil":"cactus potting mix/1 part course sand with 2 parts potting-mix",
+     "water_schedule":7,
+     "notes":"Once a week, every two weeks in winter.  Do not water if soil is wet "
+   },
+   {
+     "plant_type":"Spider plant",
+     "light":"moderate to bright",
+     "soil":"any potting mix",
+     "water_schedule":4,
+     "notes":"water if soil is dry an inch down"
+   },
+   {
+     "plant_type":"Gerbera Daisy",
+     "light":"Bright light",
+     "soil":"peat moss-based potting-mix",
+     "water_schedule":7,
+     "notes":"Drench and dry"
+   },
+   {
+     "plant_type":"Mother-in-law's tongue",
+     "light":"moderate to bright",
+     "soil":"cactus potting mix/1 part course sand with 2 parts potting-mix",
+     "water_schedule":7,
+     "notes":"in winter only once a months.  Check 2 inches down for dry soil"
+   },
+   {
+     "plant_type":"golden pothos",
+     "light":"Bright light",
+     "soil":"loose well drained potting mix",
+     "water_schedule":7,
+     "notes":"twice a week in winter"
+   },
+   {
+     "plant_type":"Chrysanthemum",
+     "light":"Bright Light",
+     "soil":"peat moss-based potitng mix",
+     "water_schedule":7,
+     "notes":"keep moist at all times"
+   },
+   {
+     "plant_type":"dracaena",
+     "light":"moderate to bright",
+     "soil":"loose well drained potting mix",
+     "water_schedule":7,
+     "notes":"allow the plant to dry between watering"
+   },
+   {
+     "plant_type":"English Ivy",
+     "light":"moderate to bright",
+     "soil":"loose well drained potting mix",
+     "water_schedule":7,
+     "notes":"Drench and dry"
+   },
+   {
+     "plant_type":"Chinese Evergreen",
+     "light":"low light",
+     "soil":"potting mix",
+     "water_schedule":5,
+     "notes":"soil should be moist. Drench and dry."
+   },
+   {
+     "plant_type":"Heart-leaf Philodendron",
+     "light":"moderate to bright",
+     "soil":"peat moss-based potting-mix",
+     "water_schedule":6,
+     "notes":"evenly moist"
+   }
+ ]
