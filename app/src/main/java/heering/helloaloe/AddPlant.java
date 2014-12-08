@@ -16,15 +16,23 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,6 +53,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
     public PlantDataSource datasource;
     public String filename;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
@@ -53,18 +62,64 @@ public class AddPlant extends Activity implements View.OnClickListener {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Create View variables
-          plantTypeTXTMSG = (EditText) findViewById(R.id.plantTypeTXTMSG);
-          plantTypeTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE);  //add done to keyboard
-          plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickNameET);
-          plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
-       // DatePicker plantLastWateredDP = (DatePicker)(findViewById(R.id.datePicker));
+        plantTypeTXTMSG = (EditText) findViewById(R.id.plantTypeTXTMSG);
+        plantTypeTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE);  //add done to keyboard
+        plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickNameET);
+        plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
+        // DatePicker plantLastWateredDP = (DatePicker)(findViewById(R.id.datePicker));
 
         // number picker limits
-        plantSchedNP = (NumberPicker)findViewById(R.id.schdulePicker);
+        plantSchedNP = (NumberPicker) findViewById(R.id.schdulePicker);
         plantSchedNP.setMaxValue(31);
         plantSchedNP.setMinValue(1);
         plantSchedNP.setWrapSelectorWheel(true);
         addButtonListeners();
+
+
+        ArrayList <String> preDefinedPlants = new ArrayList<String>();
+        try {
+            String result = loadJSONFromAsset();
+            Log.i(LOGTAG,"got Json Asset");
+            JSONObject root = new JSONObject("{"+result+"}");
+            JSONArray jsonPlantTypes = root.getJSONArray("plants");
+            for (int i = 0; i < jsonPlantTypes.length(); i++) {
+                JSONObject jsonPlant = jsonPlantTypes.getJSONObject(i);
+                String jsplantName = jsonPlant.getString("plant_type");
+                preDefinedPlants.add(jsplantName);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerPlantType);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> Plantadapter = new ArrayAdapter<String>(
+                this,android.R.layout.simple_spinner_item, preDefinedPlants);
+        // Specify the layout to use when the list of choices appears
+        Plantadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(Plantadapter);
+
+    }
+
+
+    public String loadJSONFromAsset() {
+        String json;
+        try {
+            Log.i(LOGTAG,"Now get Json Asset");
+            InputStream is = getAssets().open("planttypesjson.txt");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
     }
 
 
@@ -211,6 +266,4 @@ implements DatePickerDialog.OnDateSetListener {
         }
 
     }
-
-
 }

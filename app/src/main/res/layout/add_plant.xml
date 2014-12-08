@@ -138,6 +138,14 @@
             android:layout_below="@+id/schdulePicker"
             android:layout_alignStart="@+id/scheduleResult" />
 
+        <Spinner
+            android:id="@+id/spinnerPlantType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/plantNickNameET"
+            android:layout_alignStart="@+id/plantTypeTXTMSG"
+            android:layout_toStartOf="@+id/schdulePicker" />
+
     </RelativeLayout>
 
 
