@@ -40,65 +40,69 @@
         android:layout_below="@id/headerBkgaddPlant_border1"
         android:layout_alignParentStart="true" />
 
-    <View
-        android:id="@+id/pictureBackground"
-        android:layout_width="175dp"
-        android:background="#E0DCDA"
-        android:layout_height="175dp"
-        android:layout_below="@id/headerBkgaddPlant_border2"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp" />
-
-
-         <ImageView
-            android:id="@+id/header_logo"
-            android:src="@drawable/addplantlogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/headerBkgaddPlant_border2"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="-15dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="15dp" />
-
     <ImageView
-        android:id="@+id/takePicture"
+        android:id="@+id/header_logo"
+        android:src="@drawable/addplantlogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/take_pciture_graphic"
-        android:layout_alignEnd="@id/pictureBackground"
-        android:layout_alignTop="@id/pictureBackground"
-        android:layout_alignStart="@id/pictureBackground"
-        android:layout_alignBottom="@id/pictureBackground"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="10dp"
-        android:clickable="true" />
 
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="15dp" />
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_toEndOf="@+id/pictureBackground"
-        android:layout_alignTop="@+id/pictureBackground">
+        android:id="@+id/relativeLayoutPic"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/headerBkgaddPlant_border2"
+        android:background="#E0DCDA">
 
+        <ImageView
+            android:id="@+id/takePicture"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/take_pciture_graphic"
+            android:scaleType="fitXY"
+            android:clickable="true"
+            android:layout_margin="20dp" />
 
-        <EditText
-            android:id="@+id/plantTypeTXTMSG"
-            android:hint="@string/plantNameHint"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp" />
+            android:src="@drawable/camera_icon_png"
+            android:layout_alignBottom="@+id/takePicture"
+            android:layout_marginBottom="22dp"
+            android:layout_marginLeft="83dp" />
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutFields"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toEndOf="@+id/relativeLayoutPic"
+        android:layout_alignTop="@+id/relativeLayoutPic"
+        android:src="@drawable/camera_icon_png"
+        >
+
+        <Spinner
+            android:id="@+id/spinnerPlantType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"  />
 
         <EditText
             android:id="@+id/plantNickNameET"
             android:hint="@string/nicknameHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/plantTypeTXTMSG"
-            android:layout_alignStart="@+id/plantTypeTXTMSG" />
+            android:layout_below="@id/spinnerPlantType"
+            android:layout_alignStart="@+id/spinnerPlantType" />
 
 
         <TextView
@@ -113,42 +117,13 @@
             android:layout_marginLeft="10dp"
             android:clickable="true" />
 
-        <NumberPicker
-            android:id="@+id/schdulePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="72dp" />
-
-        <TextView
-            android:id="@+id/scheduleResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_below="@+id/schdulePicker"
-            android:layout_alignStart="@+id/displayDPdate"
-            android:layout_alignEnd="@+id/plantTypeTXTMSG" />
-
         <Button
             android:id="@+id/savePlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save Plant"
-            android:layout_below="@+id/schdulePicker"
-            android:layout_alignStart="@+id/scheduleResult" />
-
-        <Spinner
-            android:id="@+id/spinnerPlantType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/plantNickNameET"
-            android:layout_alignStart="@+id/plantTypeTXTMSG"
-            android:layout_toStartOf="@+id/schdulePicker" />
-
+            android:layout_below="@+id/displayDPdate"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
-
-
-
 
 </RelativeLayout>

@@ -16,12 +16,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import org.json.JSONArray;
@@ -45,13 +45,13 @@ import java.util.Date;
 public class AddPlant extends Activity implements View.OnClickListener {
 
     public static final String LOGTAG = "USERPLANTS";
-    public EditText plantTypeTXTMSG;
     public EditText plantNickNameTXTMSG;
-    public NumberPicker plantSchedNP = null;
-    public TextView plantSchedTV;
+    public int plantSched = 0;
     public TextView displayDPfDate;
     public PlantDataSource datasource;
     public String filename;
+    public String plantType;
+    public boolean photoTaken;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +62,12 @@ public class AddPlant extends Activity implements View.OnClickListener {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Create View variables
-        plantTypeTXTMSG = (EditText) findViewById(R.id.plantTypeTXTMSG);
-        plantTypeTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE);  //add done to keyboard
         plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickNameET);
         plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
         // DatePicker plantLastWateredDP = (DatePicker)(findViewById(R.id.datePicker));
 
-        // number picker limits
-        plantSchedNP = (NumberPicker) findViewById(R.id.schdulePicker);
-        plantSchedNP.setMaxValue(31);
-        plantSchedNP.setMinValue(1);
-        plantSchedNP.setWrapSelectorWheel(true);
-        addButtonListeners();
-
-
-        ArrayList <String> preDefinedPlants = new ArrayList<String>();
+    
+        ArrayList <Plant> preDefinedPlants = new ArrayList<Plant>();
         try {
             String result = loadJSONFromAsset();
             Log.i(LOGTAG,"got Json Asset");
@@ -84,8 +75,17 @@ public class AddPlant extends Activity implements View.OnClickListener {
             JSONArray jsonPlantTypes = root.getJSONArray("plants");
             for (int i = 0; i < jsonPlantTypes.length(); i++) {
                 JSONObject jsonPlant = jsonPlantTypes.getJSONObject(i);
+                Plant plant = new Plant();
                 String jsplantName = jsonPlant.getString("plant_type");
-                preDefinedPlants.add(jsplantName);
+                plant.setPlantType(jsplantName);
+
+                String plantImage = jsonPlant.getString("image");
+                plant.setPlantImage(plantImage);
+
+                int plantSchedule = Integer.parseInt(jsonPlant.getString("water_schedule"));
+                plant.setPlantSchedule(plantSchedule);
+
+                preDefinedPlants.add(plant);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -94,15 +94,36 @@ public class AddPlant extends Activity implements View.OnClickListener {
 
         Spinner spinner = (Spinner) findViewById(R.id.spinnerPlantType);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<String> Plantadapter = new ArrayAdapter<String>(
+        ArrayAdapter<Plant> Plantadapter = new ArrayAdapter<Plant>(
                 this,android.R.layout.simple_spinner_item, preDefinedPlants);
         // Specify the layout to use when the list of choices appears
         Plantadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(Plantadapter);
 
-    }
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+                Plant plantSelection = (Plant) arg0.getItemAtPosition(position);
+                if (plantSelection != null) {
+                    plantType = plantSelection.getPlantType();
+                    plantSched =plantSelection.getPlantSchedule();
+                    if (!photoTaken) {
+                        String fileDrawable = plantSelection.getPlantImage();
+                        filename = "android.resource://heering.helloaloe/drawable/" + fileDrawable;
+                        ImageView cameraShot = (ImageView) findViewById(R.id.takePicture);
+                        cameraShot.setImageURI(Uri.parse(filename));
+                    }
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        addButtonListeners();
+    }
 
     public String loadJSONFromAsset() {
         String json;
@@ -119,7 +140,6 @@ public class AddPlant extends Activity implements View.OnClickListener {
             return null;
         }
         return json;
-
     }
 
 
@@ -144,17 +164,9 @@ public class AddPlant extends Activity implements View.OnClickListener {
         Button saveData = (Button) findViewById(R.id.savePlant);
         if (saveData != null)
             saveData.setOnClickListener(this);
-
-        plantSchedNP = (NumberPicker)findViewById(R.id.schdulePicker);
-        plantSchedNP.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal)
-            {
-                plantSchedTV = (TextView) findViewById(R.id.scheduleResult);
-                plantSchedTV.setText(Integer.toString(newVal));
-            }
-        });
     }
+
+
 
     @Override
     public void onClick(View selectedView) {
@@ -167,15 +179,13 @@ public class AddPlant extends Activity implements View.OnClickListener {
     }
 
     private void savePlant() {
-        String plantType = plantTypeTXTMSG.getText().toString();
         String plantNickName= plantNickNameTXTMSG.getText().toString();
-        int plantSchedStr = Integer.parseInt(plantSchedTV.getText().toString());
         datasource = new PlantDataSource(this);
         datasource.open();
         Plant plant = new Plant();
         plant.setPlantType(plantType);
         plant.setPlantNickName(plantNickName);
-        plant.setPlantSchedule(plantSchedStr);
+        plant.setPlantSchedule(plantSched);
         plant.setPlantLastWatered(DatePickerFragment.sqlFormattedDate);
         plant.setPlantImage(filename);
         Log.i(LOGTAG,"Now add plant record");
@@ -183,7 +193,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
         Log.i(LOGTAG, "Plant created with id " + plant.getPlantID());
         Log.i(LOGTAG, "The plant type is " + plantType);
         Log.i(LOGTAG, "The plant nick name is " + plantNickName);
-        Log.i(LOGTAG, "The plant schedule is " + plantSchedStr);
+        Log.i(LOGTAG, "The plant schedule is " + plantSched);
         Log.i(LOGTAG, "The last Watered date is " + DatePickerFragment.sqlFormattedDate);
         Log.i(LOGTAG, "The picture path is " + filename);
     }
@@ -208,7 +218,7 @@ public class AddPlant extends Activity implements View.OnClickListener {
             filename=saveToInternalSorage(imageBitmap);
             ImageView cameraShot = (ImageView) findViewById(R.id.takePicture);
             cameraShot.setImageURI(Uri.parse(filename));
-
+            photoTaken = true;
         }}
 
     private String saveToInternalSorage(Bitmap bitmapImage){

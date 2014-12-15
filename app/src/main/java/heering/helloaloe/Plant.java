@@ -59,4 +59,9 @@ public class Plant {
     public void setPlantLastWatered(String plantLastWatered) {
         this.plantLastWatered = plantLastWatered;
     }
+
+    @Override
+    public String toString() {
+        return this.plantType;
+    }
 }
