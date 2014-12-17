@@ -12,7 +12,7 @@
 
         <receiver
             android:label="Aloe says Hello"
-            android:name=".MyWidgetProvider" >
+            android:name=".Widgetry.MyWidgetProvider" >
 
             <meta-data
                 android:name="android.appwidget.provider"
@@ -23,12 +23,19 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".MyWidgetBroadcastReceiver">
+        <receiver android:name=".Widgetry.MyWidgetBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+
+        <service android:name=".Widgetry.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false">
+        </service>
+
+
 
         <activity
             android:name="heering.helloaloe.HomeScreen"

@@ -71,11 +71,11 @@
                         android:background="#D1C6BD"
                         android:layout_alignParentBottom="true" />
 
-                    <FrameLayout
+                    <ListView
                         android:id="@+id/widgetListView"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
-                     </FrameLayout>
+                     </ListView>
 
                 </RelativeLayout>
 

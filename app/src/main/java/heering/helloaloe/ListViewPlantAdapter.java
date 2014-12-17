@@ -53,7 +53,6 @@ public class ListViewPlantAdapter extends ArrayAdapter<ListViewItem> {
         return convertView;
     }
 
-
     private static class ViewHolder {
         ImageView plantImage;
         TextView plantType;

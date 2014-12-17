@@ -1,4 +1,4 @@
-package heering.helloaloe;
+package heering.helloaloe.Widgetry;
 
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -17,7 +17,7 @@ import android.content.Intent;
 
 public class MyWidgetBroadcastReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "junk";
+    private static final String LOGTAG = "USERPLANTS";
 
     @Override
     public void onReceive(Context context, Intent intent) {
