@@ -18,8 +18,10 @@ public class RemoteViewFactory implements RemoteViewsService.RemoteViewsFactory 
 
 
     private static final String LOGTAG = "USERPLANTS";
-   // PlantDataSource datasource;
-   //public static ArrayList plantImageItems;
+    PlantDataSource datasource;
+    public static ArrayList plantImageItems;
+
+
 
     private static final String[] items={"loem", "im", "dor",
             "sit", "amet", "coer",
@@ -41,6 +43,9 @@ public class RemoteViewFactory implements RemoteViewsService.RemoteViewsFactory 
 
     public RemoteViewFactory(Context context, Intent intent) {
         this.mContext = context;
+
+
+
     }
 
     @Override

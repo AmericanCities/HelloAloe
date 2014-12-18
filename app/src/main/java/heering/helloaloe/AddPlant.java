@@ -233,7 +233,6 @@ public class AddPlant extends Activity implements View.OnClickListener {
             FileOutputStream fos;
             try {
                 fos = new FileOutputStream(myPath);
-
                // Use the compress method on the BitMap object to write image to the OutputStream
                 bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.close();
