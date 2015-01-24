@@ -2,14 +2,12 @@ package heering.helloaloe.Widgetry;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 
-import heering.helloaloe.PlantDataSource;
-import heering.helloaloe.R;
+import heering.helloaloe.Database.PlantDataSource;
 
 /**
  * Created by Matt on 12/14/2014.

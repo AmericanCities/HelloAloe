@@ -1,4 +1,4 @@
-package heering.helloaloe;
+package heering.helloaloe.Database;
 
 /**
  * Created by Matthew on 11/29/2014.
@@ -12,6 +12,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
+
+import heering.helloaloe.ListViewItem;
+import heering.helloaloe.Plant;
 
 
 public class PlantDataSource {
@@ -55,7 +58,16 @@ public class PlantDataSource {
         return plant;
     }
 
-
+    public Plant updatePlant (Plant plant){
+        ContentValues values = new ContentValues();
+        values.put(PlantDBhelper.COLUMN_PLANT_TYPE, plant.getPlantType());
+        values.put(PlantDBhelper.COLUMN_PLANT_NICKNAME, plant.getPlantNickName());
+        values.put(PlantDBhelper.COLUMN_PLANT_SCHEDULE, plant.getPlantSchedule());
+        values.put(PlantDBhelper.COLUMN_PLANT_LASTWATERED, plant.getPlantLastWatered());
+        values.put(PlantDBhelper.COLUMN_IMAGE, plant.getPlantImage());
+        database.update(PlantDBhelper.TABLE_PLANTS,values,"plantId" + "="+plant.getPlantID(),null);
+        return plant;
+    }
 
     public ArrayList getListItems(){
         ArrayList plantList = new ArrayList<ListViewItem>();
@@ -68,7 +80,8 @@ public class PlantDataSource {
                 plantList.add(new ListViewItem(
                                                cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)),
                                                cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)),
-                                               cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_IMAGE))));
+                                               cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)),
+                                               cursor.getLong(cursor.getColumnIndex(PlantDBhelper.COLUMN_ID))));
             }
         }
         Log.i(LOGTAG, "Created plantList for ListView with " + plantList.size());

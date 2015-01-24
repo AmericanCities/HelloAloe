@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import heering.helloaloe.Database.PlantDataSource;
+
 
 public class HomeScreen extends Activity implements View.OnClickListener {
 
@@ -47,8 +49,10 @@ public class HomeScreen extends Activity implements View.OnClickListener {
 
     public void onClick(View selectedView){
         if (selectedView.getId()== R.id.addPlantbtn){
-            Intent startIntent=new Intent(HomeScreen.this,AddPlant.class);
-            startActivity(startIntent);
+            Intent addPlantIntent = new Intent(HomeScreen.this,AddEditDeletePlant.class);
+            boolean newPlant = true;
+            addPlantIntent.putExtra("newPlant", newPlant);
+            startActivity(addPlantIntent);
         }
     }
 
@@ -102,7 +106,13 @@ public class HomeScreen extends Activity implements View.OnClickListener {
             ListViewItem item = (ListViewItem) plantItems.get(position);
 
             // do something
-            Toast.makeText(getActivity(), item.plantType, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), item.plantNickName, Toast.LENGTH_SHORT).show();
+            Intent addPlantIntent = new Intent(getActivity(),AddEditDeletePlant.class);
+            Long plantID = item.plantID;
+            boolean newPlant = false;
+            addPlantIntent.putExtra("newPlant", newPlant);
+            addPlantIntent.putExtra("plantID",plantID);
+            startActivity(addPlantIntent);
         }
     }
 }

@@ -9,7 +9,8 @@
         android:id="@+id/headerBkgaddPlant"
         android:layout_width="match_parent"
         android:background="#466E8F"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/headerBkgaddPlant_Text2"
@@ -124,6 +125,16 @@
             android:text="Save Plant"
             android:layout_below="@+id/displayDPdate"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/deletePlant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Plant"
+            android:layout_alignTop="@+id/savePlant"
+            android:layout_toStartOf="@+id/savePlant"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 </RelativeLayout>

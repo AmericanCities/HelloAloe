@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,13 +37,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import heering.helloaloe.Database.PlantDataSource;
+
 /**
  * Created by Matthew on 11/19/2014.
  *
  * This section allows a user to add a plant
  *
  */
-public class AddPlant extends Activity implements View.OnClickListener {
+public class AddEditDeletePlant extends Activity implements View.OnClickListener {
 
     public static final String LOGTAG = "USERPLANTS";
     public EditText plantNickNameTXTMSG;
@@ -52,12 +55,17 @@ public class AddPlant extends Activity implements View.OnClickListener {
     public String filename;
     public String plantType;
     public boolean photoTaken;
-
+    public boolean newPlant;
 
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_plant);
+        setContentView(R.layout.add_edit_delete_plant);
+
+        // Is this a new plant request or an Edit Plant request
+        newPlant = getIntent().getExtras().getBoolean("newPlant");
+        Log.i(LOGTAG,"The value of new plant is: " + newPlant);
+
         // hide keyboard on startup
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -66,7 +74,6 @@ public class AddPlant extends Activity implements View.OnClickListener {
         plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
         // DatePicker plantLastWateredDP = (DatePicker)(findViewById(R.id.datePicker));
 
-    
         ArrayList <Plant> preDefinedPlants = new ArrayList<Plant>();
         try {
             String result = loadJSONFromAsset();
@@ -91,16 +98,14 @@ public class AddPlant extends Activity implements View.OnClickListener {
             e.printStackTrace();
         }
 
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerPlantType);
         // Create an ArrayAdapter using the string array and a default spinner layout
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerPlantType);
         ArrayAdapter<Plant> Plantadapter = new ArrayAdapter<Plant>(
                 this,android.R.layout.simple_spinner_item, preDefinedPlants);
         // Specify the layout to use when the list of choices appears
         Plantadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(Plantadapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
@@ -116,7 +121,6 @@ public class AddPlant extends Activity implements View.OnClickListener {
                     }
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -144,6 +148,11 @@ public class AddPlant extends Activity implements View.OnClickListener {
 
 
     private void addButtonListeners() {
+
+        if (!newPlant){
+            Button deletePlant = (Button) findViewById(R.id.deletePlant);
+            deletePlant.setVisibility(View.VISIBLE);
+        }
 
         TextView datePickerBtn = (TextView)findViewById(R.id.displayDPdate);
         if (datePickerBtn !=null) {
@@ -196,6 +205,13 @@ public class AddPlant extends Activity implements View.OnClickListener {
         Log.i(LOGTAG, "The plant schedule is " + plantSched);
         Log.i(LOGTAG, "The last Watered date is " + DatePickerFragment.sqlFormattedDate);
         Log.i(LOGTAG, "The picture path is " + filename);
+        Context context = getApplicationContext();
+        CharSequence text = "Your plant has been saved";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+        // TODO: Add a custom toast layout
+        finish();
     }
 
 //----------------------

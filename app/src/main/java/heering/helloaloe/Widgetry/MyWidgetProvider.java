@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 import heering.helloaloe.HomeScreen;
-import heering.helloaloe.PlantDataSource;
 import heering.helloaloe.R;
 
 /**
