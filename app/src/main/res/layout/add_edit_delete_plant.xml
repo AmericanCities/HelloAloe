@@ -130,7 +130,7 @@
             android:id="@+id/deletePlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete Plant"
+            android:text="delete"
             android:layout_alignTop="@+id/savePlant"
             android:layout_toStartOf="@+id/savePlant"
             android:visibility="invisible" />

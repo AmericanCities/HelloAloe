@@ -25,19 +25,16 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import heering.helloaloe.Database.PlantDataSource;
+import heering.helloaloe.JsonReader.JsonPlantReader;
 
 /**
  * Created by Matthew on 11/19/2014.
@@ -45,137 +42,159 @@ import heering.helloaloe.Database.PlantDataSource;
  * This section allows a user to add a plant
  *
  */
-public class AddEditDeletePlant extends Activity implements View.OnClickListener {
+public class PlantDetails extends Activity implements View.OnClickListener {
 
     public static final String LOGTAG = "USERPLANTS";
     public EditText plantNickNameTXTMSG;
     public int plantSched = 0;
     public TextView displayDPfDate;
     public PlantDataSource datasource;
+    public Spinner spinner;
+    public long plantID;
+    Plant knownPlant = new Plant();
+    Plant workingPlant = new Plant();
     public String filename;
     public String plantType;
     public boolean photoTaken;
     public boolean newPlant;
+    public Button deletePlant;
+    public Button saveData;
+    public ImageView cameraShot;
+    public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_delete_plant);
 
-        // Is this a new plant request or an Edit Plant request
-        newPlant = getIntent().getExtras().getBoolean("newPlant");
-        Log.i(LOGTAG,"The value of new plant is: " + newPlant);
-
-        // hide keyboard on startup
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         // Create View variables
         plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickNameET);
         plantNickNameTXTMSG.setImeOptions(EditorInfo.IME_ACTION_DONE); //add done to keyboard
-        // DatePicker plantLastWateredDP = (DatePicker)(findViewById(R.id.datePicker));
+        spinner = (Spinner) findViewById(R.id.spinnerPlantType);
+        cameraShot = (ImageView) findViewById(R.id.takePicture);
+        displayDPfDate = (TextView)findViewById(R.id.displayDPdate);
+        deletePlant = (Button) findViewById(R.id.deletePlant);
+        saveData = (Button) findViewById(R.id.savePlant);
 
-        ArrayList <Plant> preDefinedPlants = new ArrayList<Plant>();
-        try {
-            String result = loadJSONFromAsset();
-            Log.i(LOGTAG,"got Json Asset");
-            JSONObject root = new JSONObject("{"+result+"}");
-            JSONArray jsonPlantTypes = root.getJSONArray("plants");
-            for (int i = 0; i < jsonPlantTypes.length(); i++) {
-                JSONObject jsonPlant = jsonPlantTypes.getJSONObject(i);
-                Plant plant = new Plant();
-                String jsplantName = jsonPlant.getString("plant_type");
-                plant.setPlantType(jsplantName);
+        // hides keyboard on startup
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                String plantImage = jsonPlant.getString("image");
-                plant.setPlantImage(plantImage);
 
-                int plantSchedule = Integer.parseInt(jsonPlant.getString("water_schedule"));
-                plant.setPlantSchedule(plantSchedule);
-
-                preDefinedPlants.add(plant);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        // If this is not a new plant populate interface with existing plant details and other options
+        newPlant = getIntent().getExtras().getBoolean("newPlant");
+        if (!newPlant) {
+            plantID = getIntent().getExtras().getLong("plantID");
+            datasource = new PlantDataSource(this);
+            datasource.open();
+            knownPlant = datasource.getPlant(plantID);
+            datasource.close();
+            plantNickNameTXTMSG.setText(knownPlant.getPlantNickName());
+            cameraShot.setImageURI(Uri.parse(knownPlant.getPlantImage()));
+            photoTaken = true;
+            String plantWateredDate = knownPlant.getPlantLastWatered();
+            Log.i(LOGTAG, "Plant SQL watered Date: " + plantWateredDate);
+            int monthParsed = Integer.parseInt(plantWateredDate.substring(5,7));
+            Log.i(LOGTAG, "MonthPArsed: " + monthParsed);
+            int dayParsed = Integer.parseInt(plantWateredDate.substring(8));
+            Log.i(LOGTAG, "dayPArsed: " + dayParsed);
+            displayDPfDate.setText(MONTHS[monthParsed - 1] + " " + dayParsed);
+            plantSched= knownPlant.getPlantSchedule();
+            deletePlant.setVisibility(View.VISIBLE);
+            saveData.setText("update");
+            workingPlant = knownPlant;
+            workingPlant.setPlantID(plantID);
         }
+        addListeners();
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerPlantType);
-        ArrayAdapter<Plant> Plantadapter = new ArrayAdapter<Plant>(
-                this,android.R.layout.simple_spinner_item, preDefinedPlants);
-        // Specify the layout to use when the list of choices appears
-        Plantadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(Plantadapter);
+    }
+
+
+    private void addListeners() {
+        // spinner drop down listener
+        populateSpinner();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
                 Plant plantSelection = (Plant) arg0.getItemAtPosition(position);
                 if (plantSelection != null) {
-                    plantType = plantSelection.getPlantType();
-                    plantSched =plantSelection.getPlantSchedule();
+                    plantType  = plantSelection.getPlantType();
+                    workingPlant.setPlantType(plantType);
+                    plantSched = plantSelection.getPlantSchedule();
+                    workingPlant.setPlantSchedule(plantSched);
                     if (!photoTaken) {
                         String fileDrawable = plantSelection.getPlantImage();
                         filename = "android.resource://heering.helloaloe/drawable/" + fileDrawable;
-                        ImageView cameraShot = (ImageView) findViewById(R.id.takePicture);
                         cameraShot.setImageURI(Uri.parse(filename));
+                        workingPlant.setPlantImage(filename);
                     }
                 }
-            }
+            }                                                                  // end onItemSelected
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
-        });
+        });                                                                   // end on OnItemSelectedListener
 
-        addButtonListeners();
-    }
-
-    public String loadJSONFromAsset() {
-        String json;
-        try {
-            Log.i(LOGTAG,"Now get Json Asset");
-            InputStream is = getAssets().open("planttypesjson.txt");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-
-    private void addButtonListeners() {
-
-        if (!newPlant){
-            Button deletePlant = (Button) findViewById(R.id.deletePlant);
-            deletePlant.setVisibility(View.VISIBLE);
-        }
-
+        //Date Picker button listener
         TextView datePickerBtn = (TextView)findViewById(R.id.displayDPdate);
         if (datePickerBtn !=null) {
             datePickerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayDPfDate = (TextView)findViewById(R.id.displayDPdate);
                     DatePickerFragment datePicker = new DatePickerFragment(displayDPfDate);
                     datePicker.show(getFragmentManager(), "datePicker");
                 }
             });
         }
 
+        //Take Picture button listener
         ImageView takePicture = (ImageView)findViewById(R.id.takePicture);
         if (takePicture != null)
             takePicture.setOnClickListener(this);
 
-        Button saveData = (Button) findViewById(R.id.savePlant);
+        //Save Plant button Listner
         if (saveData != null)
             saveData.setOnClickListener(this);
+
+        //Delete Plant button listener
+        //todo - add functionality
     }
 
+    private void populateSpinner(){
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        try {
+            new JsonPlantReader(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        ArrayList <Plant> preDefinedPlants;
+        preDefinedPlants=JsonPlantReader.getPreDefinedPlants();
+
+        ArrayAdapter<Plant> plantAdapter = new ArrayAdapter<Plant>(
+                this,android.R.layout.simple_spinner_item, preDefinedPlants);
+        // Specify the layout to use when the list of choices appears
+        plantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(plantAdapter);
+
+        // If known plant set the default spinner drop down.
+        if(!newPlant){
+            String knownPlantType = knownPlant.getPlantType();
+            int xx = 0;
+            int found = -1;
+            // Iterate over the List to find what position the known-plant-Type is in the drop-down
+            // In order to have it selected
+            for (Plant plant : preDefinedPlants) {
+                if(plant.getPlantType().equals(knownPlantType)) {
+                    found = xx;
+                    spinner.setSelection(found);
+                }
+                    else xx++;
+            }
+        }
+    }
 
     @Override
     public void onClick(View selectedView) {
@@ -183,33 +202,45 @@ public class AddEditDeletePlant extends Activity implements View.OnClickListener
             dispatchTakePictureIntent();
         }
         if (selectedView.getId() == R.id.savePlant) {
-            savePlant();
+            saveUpdateDeletePlant();
         }
     }
 
-    private void savePlant() {
-        String plantNickName= plantNickNameTXTMSG.getText().toString();
+
+   //---------------
+   //Save Plant
+   //---------------
+    private void saveUpdateDeletePlant() {
+        String updateAction = "saved";
+        workingPlant.setPlantLastWatered(DatePickerFragment.sqlFormattedDate);
+        workingPlant.setPlantNickName(plantNickNameTXTMSG.getText().toString());
         datasource = new PlantDataSource(this);
         datasource.open();
-        Plant plant = new Plant();
-        plant.setPlantType(plantType);
-        plant.setPlantNickName(plantNickName);
-        plant.setPlantSchedule(plantSched);
-        plant.setPlantLastWatered(DatePickerFragment.sqlFormattedDate);
-        plant.setPlantImage(filename);
-        Log.i(LOGTAG,"Now add plant record");
-        plant = datasource.create(plant);
-        Log.i(LOGTAG, "Plant created with id " + plant.getPlantID());
+        if (newPlant){
+            workingPlant = datasource.create(workingPlant);
+        }
+        else {
+            workingPlant = datasource.updatePlant(workingPlant);
+        }
+
+        Log.i(LOGTAG, "---------------------");
+        Log.i(LOGTAG, "Now updating plant record");
+        Log.i(LOGTAG, "---------------------");
+        Log.i(LOGTAG, "Plant" + updateAction + " with id " + workingPlant.getPlantID());
         Log.i(LOGTAG, "The plant type is " + plantType);
-        Log.i(LOGTAG, "The plant nick name is " + plantNickName);
         Log.i(LOGTAG, "The plant schedule is " + plantSched);
         Log.i(LOGTAG, "The last Watered date is " + DatePickerFragment.sqlFormattedDate);
         Log.i(LOGTAG, "The picture path is " + filename);
+        Log.i(LOGTAG, "---------------------");
+        datasource.close();
+
+        // TOAST ---------------------------------------
         Context context = getApplicationContext();
-        CharSequence text = "Your plant has been saved";
+        CharSequence text = "Your plant has been " + updateAction;
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        // END TOAST------------------------------------
         // TODO: Add a custom toast layout
         finish();
     }
@@ -218,6 +249,8 @@ public class AddEditDeletePlant extends Activity implements View.OnClickListener
 // TAKE PHOTO
 //----------------------
     static final int REQUEST_IMAGE_CAPTURE = 509;
+    //TODO create a resize photo/trim option
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -232,9 +265,9 @@ public class AddEditDeletePlant extends Activity implements View.OnClickListener
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             filename=saveToInternalSorage(imageBitmap);
-            ImageView cameraShot = (ImageView) findViewById(R.id.takePicture);
             cameraShot.setImageURI(Uri.parse(filename));
             photoTaken = true;
+            workingPlant.setPlantImage(filename);
         }}
 
     private String saveToInternalSorage(Bitmap bitmapImage){
@@ -259,10 +292,12 @@ public class AddEditDeletePlant extends Activity implements View.OnClickListener
     }
 
 
+    //-------------------------
+    // DATE PICKER FRAGMENT
+    //-------------------------
     public static class DatePickerFragment extends DialogFragment
-implements DatePickerDialog.OnDateSetListener {
+        implements DatePickerDialog.OnDateSetListener {
         public static String sqlFormattedDate;
-        public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         TextView displayDate;
 
         public DatePickerFragment(TextView textview)
@@ -287,8 +322,7 @@ implements DatePickerDialog.OnDateSetListener {
             c.set(year, month, day);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sqlFormattedDate = sdf.format(c.getTime());
-            displayDate.setText( MONTHS[month] + " " + day);
+                        displayDate.setText( MONTHS[month] + " " + day);
         }
-
     }
 }

@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import heering.helloaloe.Database.PlantDataSource;
 
 
+//@TODO update refresh list view after creating a new plant
+//@TODO update homescreen layout for Relative percentage view
+
 public class HomeScreen extends Activity implements View.OnClickListener {
 
     private static final String LOGTAG = "USERPLANTS";
@@ -38,7 +41,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
         datasource = new PlantDataSource(this);
         datasource.open();
         plantItems = datasource.getListItems();
-
+        datasource.close();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container3, new PlantListFragment())
@@ -49,7 +52,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
 
     public void onClick(View selectedView){
         if (selectedView.getId()== R.id.addPlantbtn){
-            Intent addPlantIntent = new Intent(HomeScreen.this,AddEditDeletePlant.class);
+            Intent addPlantIntent = new Intent(HomeScreen.this,PlantDetails.class);
             boolean newPlant = true;
             addPlantIntent.putExtra("newPlant", newPlant);
             startActivity(addPlantIntent);
@@ -107,12 +110,12 @@ public class HomeScreen extends Activity implements View.OnClickListener {
 
             // do something
             Toast.makeText(getActivity(), item.plantNickName, Toast.LENGTH_SHORT).show();
-            Intent addPlantIntent = new Intent(getActivity(),AddEditDeletePlant.class);
+            Intent editPlantIntent = new Intent(getActivity(),PlantDetails.class);
             Long plantID = item.plantID;
             boolean newPlant = false;
-            addPlantIntent.putExtra("newPlant", newPlant);
-            addPlantIntent.putExtra("plantID",plantID);
-            startActivity(addPlantIntent);
+            editPlantIntent.putExtra("newPlant", newPlant);
+            editPlantIntent.putExtra("plantID",plantID);
+            startActivity(editPlantIntent);
         }
     }
 }

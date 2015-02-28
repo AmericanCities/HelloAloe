@@ -69,6 +69,27 @@ public class PlantDataSource {
         return plant;
     }
 
+
+    public Plant getPlant (long plantID) {
+        Plant gotPlant = new Plant();
+        Log.i(LOGTAG, "got here with plantID" + plantID);
+        String dbQuery = "SELECT * FROM plants WHERE plantID = ?";
+        String plantIDString = Long.toString(plantID);
+        //dbQuery,null
+        Cursor c = database.rawQuery(dbQuery, new String[] {plantIDString});
+        Log.i(LOGTAG, "Returned from db " + c.getCount() + " rows");
+        if (c.getCount()>0  && c.moveToFirst()) {
+            gotPlant.setPlantType(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)));
+            gotPlant.setPlantNickName(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)));
+            gotPlant.setPlantSchedule(c.getInt(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SCHEDULE)));
+            gotPlant.setPlantImage(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)));
+            gotPlant.setPlantLastWatered(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_LASTWATERED)));
+            Log.i(LOGTAG, "found plant");
+        }
+        return gotPlant;
+    }
+
+
     public ArrayList getListItems(){
         ArrayList plantList = new ArrayList<ListViewItem>();
         Cursor cursor = database.query(PlantDBhelper.TABLE_PLANTS,allColumns,
@@ -78,10 +99,10 @@ public class PlantDataSource {
         if (cursor.getCount()>0) {
             while (cursor.moveToNext()){
                 plantList.add(new ListViewItem(
-                                               cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)),
-                                               cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)),
-                                               cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)),
-                                               cursor.getLong(cursor.getColumnIndex(PlantDBhelper.COLUMN_ID))));
+                         cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)),
+                         cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)),
+                         cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)),
+                          cursor.getLong(cursor.getColumnIndex(PlantDBhelper.COLUMN_ID))));
             }
         }
         Log.i(LOGTAG, "Created plantList for ListView with " + plantList.size());
