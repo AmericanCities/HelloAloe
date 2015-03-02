@@ -122,7 +122,7 @@
             android:id="@+id/savePlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save Plant"
+            android:text="add plant"
             android:layout_below="@+id/displayDPdate"
             android:layout_centerHorizontal="true" />
 

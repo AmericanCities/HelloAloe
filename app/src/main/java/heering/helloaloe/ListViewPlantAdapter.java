@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.net.URI;
 import java.util.List;
 
@@ -58,4 +57,9 @@ public class ListViewPlantAdapter extends ArrayAdapter<ListViewItem> {
         TextView plantType;
         TextView plantNickName;
     }
+
+    private static class UpdateList{
+
+    }
+
 }

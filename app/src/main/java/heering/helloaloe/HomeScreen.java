@@ -17,37 +17,26 @@ import java.util.ArrayList;
 import heering.helloaloe.Database.PlantDataSource;
 
 
-//@TODO update refresh list view after creating a new plant
 //@TODO update homescreen layout for Relative percentage view
 
 public class HomeScreen extends Activity implements View.OnClickListener {
 
     private static final String LOGTAG = "USERPLANTS";
-    PlantDataSource datasource;
-    public static ArrayList plantItems;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOGTAG,"And we are off and running");
-
         setContentView(R.layout.home_screen);
-
         Button addPlant = (Button)findViewById(R.id.addPlantbtn);
         if (addPlant != null)
             addPlant.setOnClickListener(this);
 
-        datasource = new PlantDataSource(this);
-        datasource.open();
-        plantItems = datasource.getListItems();
-        datasource.close();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container3, new PlantListFragment())
+                    .replace(R.id.plantListView, new PlantListFragment())
                     .commit();
         }
-
     }
 
     public void onClick(View selectedView){
@@ -72,29 +61,40 @@ public class HomeScreen extends Activity implements View.OnClickListener {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-
     /**
-     * A placeholder fragment containing a simple view.
+     * Fragment containing a listView
      */
-    public static class PlantListFragment extends ListFragment {
+   public static class PlantListFragment extends ListFragment {
+          private PlantDataSource dbHelper;
+          private ListViewPlantAdapter adapter;
+          private ArrayList plantItems;
 
         //@Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            dbHelper = new PlantDataSource(getActivity());
+            plantItems = dbHelper.getListItems();
+            adapter = new ListViewPlantAdapter(getActivity(), plantItems);
+
             // initialize and set the list adapter
-            Log.i(LOGTAG,"There are " + plantItems.size() + " items");
-            setListAdapter(new ListViewPlantAdapter(getActivity(), plantItems));
+            setListAdapter(adapter);
         }
 
+       public void onResume(){
+              super.onResume();
+              Log.i(LOGTAG,"And we are Resuming");
+              plantItems.clear();
+              plantItems.addAll(dbHelper.getListItems());
+              adapter.notifyDataSetChanged();
+              //http://stackoverflow.com/questions/14503006/android-listview-not-refreshing-after-notifydatasetchanged
+     }
 
         @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {

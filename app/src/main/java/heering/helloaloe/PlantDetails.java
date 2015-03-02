@@ -32,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import heering.helloaloe.Database.PlantDataSource;
 import heering.helloaloe.JsonReader.JsonPlantReader;
 
@@ -61,7 +60,7 @@ public class PlantDetails extends Activity implements View.OnClickListener {
     public Button saveData;
     public ImageView cameraShot;
     public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
+    public DatePickerFragment datePicker;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +76,18 @@ public class PlantDetails extends Activity implements View.OnClickListener {
         displayDPfDate = (TextView)findViewById(R.id.displayDPdate);
         deletePlant = (Button) findViewById(R.id.deletePlant);
         saveData = (Button) findViewById(R.id.savePlant);
+        datePicker = new DatePickerFragment(displayDPfDate);
 
         // hides keyboard on startup
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
+        // Crude error validation: Pre-populate water date as today's date in case user does not specify it.
+        final Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String setDate= sdf.format(c.getTime());
+        workingPlant.setPlantLastWatered(setDate);
+
 
 
         // If this is not a new plant populate interface with existing plant details and other options
@@ -93,21 +101,28 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             plantNickNameTXTMSG.setText(knownPlant.getPlantNickName());
             cameraShot.setImageURI(Uri.parse(knownPlant.getPlantImage()));
             photoTaken = true;
+
+                Log.i(LOGTAG, "---------------------");
+                Log.i(LOGTAG, "Getting plant record ");
+                Log.i(LOGTAG, "---------------------");
+                Log.i(LOGTAG, "Plant got with id " + knownPlant.getPlantID());
+                Log.i(LOGTAG, "The plant type is " + knownPlant.getPlantType());
+                Log.i(LOGTAG, "The plant schedule is " + knownPlant.getPlantSchedule());
+                Log.i(LOGTAG, "The last Watered date is " + knownPlant.getPlantLastWatered());
+                Log.i(LOGTAG, "The picture path is " + knownPlant.getPlantImage());
+                Log.i(LOGTAG, "---------------------");
+
             String plantWateredDate = knownPlant.getPlantLastWatered();
-            Log.i(LOGTAG, "Plant SQL watered Date: " + plantWateredDate);
             int monthParsed = Integer.parseInt(plantWateredDate.substring(5,7));
-            Log.i(LOGTAG, "MonthPArsed: " + monthParsed);
             int dayParsed = Integer.parseInt(plantWateredDate.substring(8));
-            Log.i(LOGTAG, "dayPArsed: " + dayParsed);
             displayDPfDate.setText(MONTHS[monthParsed - 1] + " " + dayParsed);
+            Log.i(LOGTAG, "displayDPDate is: " +  MONTHS[monthParsed - 1] + " " + dayParsed);
             plantSched= knownPlant.getPlantSchedule();
             deletePlant.setVisibility(View.VISIBLE);
             saveData.setText("update");
             workingPlant = knownPlant;
-            workingPlant.setPlantID(plantID);
         }
         addListeners();
-
     }
 
 
@@ -142,7 +157,7 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             datePickerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DatePickerFragment datePicker = new DatePickerFragment(displayDPfDate);
+                    //DatePickerFragment datePicker = new DatePickerFragment(displayDPfDate);
                     datePicker.show(getFragmentManager(), "datePicker");
                 }
             });
@@ -158,7 +173,8 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             saveData.setOnClickListener(this);
 
         //Delete Plant button listener
-        //todo - add functionality
+        if (deletePlant != null)
+            deletePlant.setOnClickListener(this);
     }
 
     private void populateSpinner(){
@@ -202,7 +218,13 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             dispatchTakePictureIntent();
         }
         if (selectedView.getId() == R.id.savePlant) {
-            saveUpdateDeletePlant();
+            Boolean updatePlant = true;
+            saveUpdateDeletePlant(updatePlant);
+        }
+
+        if (selectedView.getId() == R.id.deletePlant) {
+            Boolean updatePlant = false;
+            saveUpdateDeletePlant(updatePlant);
         }
     }
 
@@ -210,9 +232,12 @@ public class PlantDetails extends Activity implements View.OnClickListener {
    //---------------
    //Save Plant
    //---------------
-    private void saveUpdateDeletePlant() {
-        String updateAction = "saved";
-        workingPlant.setPlantLastWatered(DatePickerFragment.sqlFormattedDate);
+    private void saveUpdateDeletePlant(boolean updatePlant) {
+        String updateAction = "added";
+        if (DatePickerFragment.sqlFormattedDate != null){
+            workingPlant.setPlantLastWatered(DatePickerFragment.sqlFormattedDate);
+        }
+
         workingPlant.setPlantNickName(plantNickNameTXTMSG.getText().toString());
         datasource = new PlantDataSource(this);
         datasource.open();
@@ -220,18 +245,25 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             workingPlant = datasource.create(workingPlant);
         }
         else {
-            workingPlant = datasource.updatePlant(workingPlant);
+            if (updatePlant) {
+                updateAction = "updated";
+                datasource.updatePlant(workingPlant);
+            }
+            else {
+                updateAction = "deleted";
+                datasource.deletePlant(workingPlant.getPlantID());
+            }
         }
+            Log.i(LOGTAG, "---------------------");
+            Log.i(LOGTAG, "Now updating plant record");
+            Log.i(LOGTAG, "---------------------");
+            Log.i(LOGTAG, "Plant " + updateAction + " with id " + workingPlant.getPlantID());
+            Log.i(LOGTAG, "The plant type is " + plantType);
+            Log.i(LOGTAG, "The plant schedule is " + plantSched);
+            Log.i(LOGTAG, "The last Watered date is " + workingPlant.getPlantLastWatered());
+            Log.i(LOGTAG, "The picture path is " + workingPlant.getPlantImage());
+            Log.i(LOGTAG, "---------------------");
 
-        Log.i(LOGTAG, "---------------------");
-        Log.i(LOGTAG, "Now updating plant record");
-        Log.i(LOGTAG, "---------------------");
-        Log.i(LOGTAG, "Plant" + updateAction + " with id " + workingPlant.getPlantID());
-        Log.i(LOGTAG, "The plant type is " + plantType);
-        Log.i(LOGTAG, "The plant schedule is " + plantSched);
-        Log.i(LOGTAG, "The last Watered date is " + DatePickerFragment.sqlFormattedDate);
-        Log.i(LOGTAG, "The picture path is " + filename);
-        Log.i(LOGTAG, "---------------------");
         datasource.close();
 
         // TOAST ---------------------------------------
@@ -264,13 +296,13 @@ public class PlantDetails extends Activity implements View.OnClickListener {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            filename=saveToInternalSorage(imageBitmap);
+            filename=saveToInternalStorage(imageBitmap);
             cameraShot.setImageURI(Uri.parse(filename));
             photoTaken = true;
             workingPlant.setPlantImage(filename);
         }}
 
-    private String saveToInternalSorage(Bitmap bitmapImage){
+    private String saveToInternalStorage(Bitmap bitmapImage){
             //http://stackoverflow.com/questions/17674634/saving-images-to-internal-memory-in-android
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             // path to /data/data/yourapp/app_data/imageDir
@@ -297,8 +329,10 @@ public class PlantDetails extends Activity implements View.OnClickListener {
     //-------------------------
     public static class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
+
         public static String sqlFormattedDate;
         TextView displayDate;
+
 
         public DatePickerFragment(TextView textview)
         {
@@ -312,7 +346,7 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-
+            Log.i(LOGTAG, "Year: " + year +  " Month: " + month + " Day: " + day);
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
@@ -322,7 +356,7 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             c.set(year, month, day);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sqlFormattedDate = sdf.format(c.getTime());
-                        displayDate.setText( MONTHS[month] + " " + day);
+            displayDate.setText( MONTHS[month] + " " + day);
         }
     }
 }

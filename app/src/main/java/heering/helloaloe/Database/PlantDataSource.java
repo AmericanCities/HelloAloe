@@ -31,7 +31,6 @@ public class PlantDataSource {
             PlantDBhelper.COLUMN_PLANT_LASTWATERED,
             PlantDBhelper.COLUMN_IMAGE    };
 
-
     public PlantDataSource(Context context){
         dbhelper = new PlantDBhelper(context);
     }
@@ -57,6 +56,14 @@ public class PlantDataSource {
         plant.setPlantID(insertid);
         return plant;
     }
+
+    public void deletePlant(Long plantID){
+        String whereClause = "plantID" + "=?";
+        String dbQuery = "SELECT * FROM plants WHERE plantID = ?";
+        String[] whereArgs = new String[] { String.valueOf(plantID) };
+        database.delete(PlantDBhelper.TABLE_PLANTS,whereClause,whereArgs);
+    }
+
 
     public Plant updatePlant (Plant plant){
         ContentValues values = new ContentValues();
@@ -84,6 +91,7 @@ public class PlantDataSource {
             gotPlant.setPlantSchedule(c.getInt(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SCHEDULE)));
             gotPlant.setPlantImage(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)));
             gotPlant.setPlantLastWatered(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_LASTWATERED)));
+            gotPlant.setPlantID(plantID);
             Log.i(LOGTAG, "found plant");
         }
         return gotPlant;
@@ -91,6 +99,7 @@ public class PlantDataSource {
 
 
     public ArrayList getListItems(){
+        open();
         ArrayList plantList = new ArrayList<ListViewItem>();
         Cursor cursor = database.query(PlantDBhelper.TABLE_PLANTS,allColumns,
                 null,null,null,null,null);
@@ -106,6 +115,7 @@ public class PlantDataSource {
             }
         }
         Log.i(LOGTAG, "Created plantList for ListView with " + plantList.size());
+        close();
         return plantList;
     }
 
@@ -131,5 +141,4 @@ public class PlantDataSource {
         }
         return plants;
     }
-
 }
