@@ -9,6 +9,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -32,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import eu.janmuller.android.simplecropimage.CropImage;
 import heering.helloaloe.Database.PlantDataSource;
 import heering.helloaloe.JsonReader.JsonPlantReader;
 
@@ -61,6 +64,9 @@ public class PlantDetails extends Activity implements View.OnClickListener {
     public ImageView cameraShot;
     public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public DatePickerFragment datePicker;
+
+  // todo:  http://karanbalkar.com/2013/07/tutorial-41-using-alarmmanager-and-broadcastreceiver-in-android/
+  // add Alarm notification
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,8 +286,59 @@ public class PlantDetails extends Activity implements View.OnClickListener {
 //----------------------
 // TAKE PHOTO
 //----------------------
+
+    final int REQUEST_CODE_CROP_IMAGE = 212;
     static final int REQUEST_IMAGE_CAPTURE = 509;
     //TODO create a resize photo/trim option
+
+    private void runCropImage() {
+
+        // create explicit intent
+        Intent intent = new Intent(this, CropImage.class);
+
+        // tell CropImage activity to look for image to crop
+        intent.putExtra(CropImage.IMAGE_PATH, filename);
+
+        // allow CropImage activity to rescale image
+        intent.putExtra(CropImage.SCALE, true);
+
+        // if the aspect ratio is fixed to ratio 3/2
+        intent.putExtra(CropImage.ASPECT_X, 3);
+        intent.putExtra(CropImage.ASPECT_Y, 2);
+
+        // start activity CropImage with certain request code and listen
+        // for result
+        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_IMAGE_CAPTURE:
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                filename=saveToInternalStorage(imageBitmap);
+                cameraShot.setImageURI(Uri.parse(filename));
+                photoTaken = true;
+                workingPlant.setPlantImage(filename);
+                break;
+
+            case REQUEST_CODE_CROP_IMAGE:
+                String path = data.getStringExtra(CropImage.IMAGE_PATH);
+                // if nothing received
+                if (path == null) {
+                   return;
+                }
+                // cropped bitmap
+                Bitmap bitmap = BitmapFactory.decodeFile(filename);
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -291,16 +348,16 @@ public class PlantDetails extends Activity implements View.OnClickListener {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            filename=saveToInternalStorage(imageBitmap);
-            cameraShot.setImageURI(Uri.parse(filename));
-            photoTaken = true;
-            workingPlant.setPlantImage(filename);
-        }}
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            filename=saveToInternalStorage(imageBitmap);
+//            cameraShot.setImageURI(Uri.parse(filename));
+//            photoTaken = true;
+//            workingPlant.setPlantImage(filename);
+//        }}
 
     private String saveToInternalStorage(Bitmap bitmapImage){
             //http://stackoverflow.com/questions/17674634/saving-images-to-internal-memory-in-android
