@@ -67,7 +67,7 @@ public class PlantDetails extends Activity implements View.OnClickListener {
 
   // todo:  http://karanbalkar.com/2013/07/tutorial-41-using-alarmmanager-and-broadcastreceiver-in-android/
   // add Alarm notification
-
+  // http://stackoverflow.com/questions/22705776/alarm-manager-broadcast-receiver-not-stopping
 
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

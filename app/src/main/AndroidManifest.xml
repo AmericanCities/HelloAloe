@@ -49,9 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotificationReceiverActivity"/>
         <activity android:name=".PlantDetails"/>
         <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
+        <receiver android:name=".WaterNotification.NotificationBroadcastReceiver"/>
     </application>
 
 </manifest>

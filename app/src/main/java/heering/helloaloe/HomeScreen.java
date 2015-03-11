@@ -1,7 +1,9 @@
 package heering.helloaloe;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.ListFragment;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,17 +13,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-
+import java.util.Calendar;
 import heering.helloaloe.Database.PlantDataSource;
+import heering.helloaloe.WaterNotification.NotificationBroadcastReceiver;
 
 
 //@TODO update homescreen layout for Relative percentage view
+//@TODO delete pendingIntent variable
 
 public class HomeScreen extends Activity implements View.OnClickListener {
 
     private static final String LOGTAG = "USERPLANTS";
+    private PendingIntent pendingIntent; // for testing notifications
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +41,32 @@ public class HomeScreen extends Activity implements View.OnClickListener {
                     .replace(R.id.plantListView, new PlantListFragment())
                     .commit();
         }
-    }
 
+        // Testing Alarm Notification
+        Calendar calendar = Calendar.getInstance();
+        String message = "boom goes the notificaiton";
+        calendar.set(Calendar.MONTH, 2);
+        calendar.set(Calendar.YEAR, 2015);
+        calendar.set(Calendar.DAY_OF_MONTH, 10);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE, 10);
+        calendar.set(Calendar.SECOND, 30);
+        calendar.set(Calendar.AM_PM,Calendar.AM);
+
+        Log.i(LOGTAG,"Alarm in in Miliseconds: " + calendar.getTimeInMillis());
+        Intent alarmIntent = new Intent(HomeScreen.this, NotificationBroadcastReceiver.class);
+        alarmIntent.putExtra("message", message);
+
+        pendingIntent = PendingIntent.getBroadcast(HomeScreen.this, 0, alarmIntent, 0);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+
+        //alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+        long time= System.currentTimeMillis();
+        //current time + 5 seconds
+        alarmManager.set(AlarmManager.RTC, time + 30000, pendingIntent);
+    }
     public void onClick(View selectedView){
         if (selectedView.getId()== R.id.addPlantbtn){
             Intent addPlantIntent = new Intent(HomeScreen.this,PlantDetails.class);
