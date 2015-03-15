@@ -14,4 +14,5 @@
     <string name="last_date_dsc">last watered</string>
     <string name="plantNameHint">enter plant type</string>
     <string name="nicknameHint">plant name</string>
+    <string name="customnotificationticker">Your plant may be thirsty</string>
 </resources>

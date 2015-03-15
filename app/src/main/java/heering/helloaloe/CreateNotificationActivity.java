@@ -24,7 +24,7 @@ public class CreateNotificationActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notificationresult);
+        setContentView(R.layout.customnotification);
     }
 
     public void createNotification(View view) {
@@ -45,5 +45,7 @@ public class CreateNotificationActivity extends Activity {
         // hide the notification after its selected
         noti.flags |= Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(0, noti);
+        //remoteViews.setOnClickPendingIntent(R.id.button1, resultPendingIntent);
+
     }
 }

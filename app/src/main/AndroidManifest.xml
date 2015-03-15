@@ -52,6 +52,7 @@
         <activity android:name=".PlantDetails"/>
         <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
         <receiver android:name=".WaterNotification.NotificationBroadcastReceiver"/>
+        <receiver android:name=".WaterNotification.WaterButtonReceiver"/>
     </application>
 
 </manifest>

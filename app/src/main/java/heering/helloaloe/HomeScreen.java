@@ -41,20 +41,14 @@ public class HomeScreen extends Activity implements View.OnClickListener {
                     .replace(R.id.plantListView, new PlantListFragment())
                     .commit();
         }
-
+        //*****************************************************
+        //
+        //
         // Testing Alarm Notification
         Calendar calendar = Calendar.getInstance();
-        String message = "boom goes the notificaiton";
-        calendar.set(Calendar.MONTH, 2);
-        calendar.set(Calendar.YEAR, 2015);
-        calendar.set(Calendar.DAY_OF_MONTH, 10);
-
-        calendar.set(Calendar.HOUR_OF_DAY, 00);
-        calendar.set(Calendar.MINUTE, 10);
-        calendar.set(Calendar.SECOND, 30);
-        calendar.set(Calendar.AM_PM,Calendar.AM);
-
+        String message = "Heart-leaf Philodendron";
         Log.i(LOGTAG,"Alarm in in Miliseconds: " + calendar.getTimeInMillis());
+
         Intent alarmIntent = new Intent(HomeScreen.this, NotificationBroadcastReceiver.class);
         alarmIntent.putExtra("message", message);
 
@@ -65,7 +59,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
         //alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
         long time= System.currentTimeMillis();
         //current time + 5 seconds
-        alarmManager.set(AlarmManager.RTC, time + 30000, pendingIntent);
+        alarmManager.set(AlarmManager.RTC, time + 5000, pendingIntent);
     }
     public void onClick(View selectedView){
         if (selectedView.getId()== R.id.addPlantbtn){
