@@ -16,10 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import heering.helloaloe.Database.PlantDataSource;
 
-
-
-//@TODO update homescreen layout for Relative percentage view
-//@TODO delete pendingIntent variable
+//@TODO add buttons to listview http://www.geekmind.net/2009/11/android-custom-list-item-with-nested.html
 
 public class HomeScreen extends Activity implements View.OnClickListener {
 

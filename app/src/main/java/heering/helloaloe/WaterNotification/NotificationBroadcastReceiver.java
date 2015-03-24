@@ -27,7 +27,7 @@ import heering.helloaloe.R;
 //http://developer.android.com/guide/topics/ui/notifiers/notifications.html
 //http://www.objc.io/issue-11/android-notifications.html
 //http://stackoverflow.com/questions/12438209/handling-buttons-inside-android-notifications
-
+// http://karanbalkar.com/2013/07/tutorial-41-using-alarmmanager-and-broadcastreceiver-in-android/
 
 //TODO: display progress bar in notificaiton when watering action occurs
 // example here: http://developer.android.com/guide/topics/ui/notifiers/notifications.html#BigNotify

@@ -5,13 +5,13 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +54,7 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
     public long plantID;
     Plant knownPlant = new Plant();
     Plant workingPlant = new Plant();
-    public String filename;
+    public String mCurrentPhotoPath;
     public String plantType;
     public boolean photoTaken;
     public boolean newPlant;
@@ -65,7 +65,7 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
     public DatePickerFragment datePicker;
     String plantWateredDate;
 
-  // todo:  http://karanbalkar.com/2013/07/tutorial-41-using-alarmmanager-and-broadcastreceiver-in-android/
+
   // add Alarm notification
   // http://stackoverflow.com/questions/22705776/alarm-manager-broadcast-receiver-not-stopping
   //todo: set window direction with compass (N,S,W,E) to determine light requirements
@@ -74,7 +74,7 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_edit_delete_plant);
+        setContentView(R.layout.plant_details);
 
         // Create View variables
         plantNickNameTXTMSG = (EditText) findViewById(R.id.plantNickNameET);
@@ -149,7 +149,7 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
 
                     if (!photoTaken) {
                         String fileDrawable = plantSelection.getPlantImage();
-                        filename = "android.resource://heering.helloaloe/drawable/" + fileDrawable;
+                        String filename = "android.resource://heering.helloaloe/drawable/" + fileDrawable;
                         cameraShot.setImageURI(Uri.parse(filename));
                         workingPlant.setPlantImage(filename);
                     }
@@ -301,7 +301,6 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
 
     final int REQUEST_CODE_CROP_IMAGE = 212;
     static final int REQUEST_IMAGE_CAPTURE = 509;
-    //TODO create a resize photo/trim option
 
     private void runCropImage() {
 
@@ -309,13 +308,13 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
         Intent intent = new Intent(this, CropImage.class);
 
         // tell CropImage activity to look for image to crop
-        intent.putExtra(CropImage.IMAGE_PATH, filename);
+        intent.putExtra(CropImage.IMAGE_PATH, mCurrentPhotoPath);
 
         // allow CropImage activity to rescale image
         intent.putExtra(CropImage.SCALE, true);
 
         // if the aspect ratio is fixed to ratio 3/2
-        intent.putExtra(CropImage.ASPECT_X, 3);
+        intent.putExtra(CropImage.ASPECT_X, 2);
         intent.putExtra(CropImage.ASPECT_Y, 2);
 
         // start activity CropImage with certain request code and listen
@@ -329,13 +328,11 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
             return;
         }
         switch (requestCode) {
-            case REQUEST_IMAGE_CAPTURE:
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                filename=saveToInternalStorage(imageBitmap);
-                cameraShot.setImageURI(Uri.parse(filename));
+            case REQUEST_TAKE_PHOTO:
+                runCropImage();
                 photoTaken = true;
-                workingPlant.setPlantImage(filename);
+                workingPlant.setPlantImage(mCurrentPhotoPath);
+                cameraShot.setImageURI(Uri.parse(mCurrentPhotoPath));
                 break;
 
             case REQUEST_CODE_CROP_IMAGE:
@@ -345,51 +342,52 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
                    return;
                 }
                 // cropped bitmap
-                Bitmap bitmap = BitmapFactory.decodeFile(filename);
+                Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
 
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    static final int REQUEST_TAKE_PHOTO = 1;
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            filename=saveToInternalStorage(imageBitmap);
-//            cameraShot.setImageURI(Uri.parse(filename));
-//            photoTaken = true;
-//            workingPlant.setPlantImage(filename);
-//        }}
-
-    private String saveToInternalStorage(Bitmap bitmapImage){
-            //http://stackoverflow.com/questions/17674634/saving-images-to-internal-memory-in-android
-            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-            // path to /data/data/yourapp/app_data/imageDir
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            // Create imageDir
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String imageFileName = "JPEG_" + timeStamp + ".jpg";
-            File myPath = new File(directory,imageFileName);
-            FileOutputStream fos;
+            // Create the File where the photo should go
+            File photoFile = null;
             try {
-                fos = new FileOutputStream(myPath);
-               // Use the compress method on the BitMap object to write image to the OutputStream
-                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+             }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
-            return (directory.getAbsolutePath() +"/" +imageFileName);
+        }
     }
 
 

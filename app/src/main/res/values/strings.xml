@@ -4,7 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="addNewPlant">Click to add a new plant</string>
-    <string name ="directions">Add your house plant and activate  the Hello Aloe widget to be reminded to water your plants</string>
+    <string name ="directions">Add your house plant and activate. Hello Aloe will reminded you to water your plants</string>
     <string name ="listViewHeader">Your Plants</string>
     <string name="homeScreenHeader">Hello Aloe</string>
     <string name="seasonScreenHeader">Hi there!</string>

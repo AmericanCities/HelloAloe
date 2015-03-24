@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container">
 
- <View
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="3">
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+    <View
      android:id="@+id/headerBkg"
      android:layout_width="match_parent"
      android:background="#75B8EF"
-     android:layout_height="80dp" />
+     android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/headerText"
@@ -19,24 +28,18 @@
         android:textColor="#FFFFFF"
         android:layout_alignBottom="@id/headerBkg"
         android:layout_alignParentEnd="true"
-        android:textSize="38sp"
-        android:layout_marginRight="36dp"
+        android:textSize="26sp"
+        android:layout_marginRight="37dp"
         android:layout_marginBottom="10dp" />
 
-    <View
-        android:id="@+id/headerBkg_border1"
-        android:layout_width="match_parent"
-        android:background="#466E8F"
-        android:layout_height="15dp"
-        android:layout_below="@id/headerBkg"
-        android:layout_alignParentStart="true" />
+
 
     <View
         android:id="@+id/headerBkg_border2"
         android:layout_width="match_parent"
         android:background="#E0DCDA"
         android:layout_height="10dp"
-        android:layout_below="@id/headerBkg_border1"
+        android:layout_below="@id/headerBkg"
         android:layout_alignParentStart="true" />
 
     <View
@@ -53,20 +56,21 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/headerBkg_border2"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="-15dp"
+        android:layout_marginBottom="-40dp"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="17dp" />
+        android:layout_marginLeft="15dp" />
 
     <Button
         android:id="@+id/addPlantbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerBkg_border2"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="80dp"
         android:layout_alignStart="@id/header_logo"
         android:layout_marginLeft="42dp"
+        android:layout_marginRight="8dp"
         android:background="#E0DCDA"
-        android:layout_alignEnd="@id/headerText"/>
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/button_txt"
@@ -77,11 +81,11 @@
         android:textColor="#122A3A"
         android:layout_alignBottom="@id/addPlantbtn"
         android:layout_alignTop="@id/addPlantbtn"
-        android:layout_alignStart="@id/addPlantbtn"
         android:gravity="center_vertical"
-        android:layout_marginLeft="60dp"
-        android:layout_alignEnd="@+id/addPlantbtn"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="false"
+        android:paddingRight="16dp" />
 
 
     <ImageView
@@ -101,48 +105,65 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/directions"
-        android:layout_toStartOf="@id/button_txt"
         android:textColor="#122A3A"
-        android:layout_below="@id/addPlantbtn"
-        android:layout_alignEnd="@id/headerText"
+        android:padding="10dp"
+        android:layout_below="@+id/addPlantbtn"
         android:layout_toEndOf="@+id/addIcon" />
 
+     </RelativeLayout>
 
-    <View
-        android:id="@+id/headerBkg_border3"
-        android:layout_width="match_parent"
-        android:background="#466E8F"
-        android:layout_height="30dp"
-        android:layout_below="@id/container2"
-        android:layout_alignParentStart="true" />
-
-    <View
-        android:id="@+id/headerBkg_border4"
-        android:layout_width="match_parent"
-        android:background="#9B6F4E"
-        android:layout_height="10dp"
-        android:layout_below="@id/headerBkg_border3"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/listView_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/listViewHeader"
-        android:textColor="#FFFFFF"
-        android:layout_alignBottom="@id/headerBkg_border3"
-        android:layout_alignTop="@id/headerBkg_border3"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="18sp"
-        android:gravity="center_vertical|center_horizontal" />
-
-    <FrameLayout
-        android:id="@+id/plantListView"
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/headerBkg_border4"
-        android:layout_alignParentStart="true"></FrameLayout>
+        android:layout_weight="3">
 
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <View
+                android:id="@+id/headerBkg_border3"
+                android:layout_width="match_parent"
+                android:background="#466E8F"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                />
+
+
+            <View
+                android:id="@+id/headerBkg_border5"
+                android:layout_width="match_parent"
+                android:background="#E0DCDA"
+                android:layout_height="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/headerBkg_border3" />
+
+            <TextView
+                android:id="@+id/listView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/listViewHeader"
+                android:textColor="#FFFFFF"
+                android:layout_alignBottom="@id/headerBkg_border3"
+                android:layout_alignParentEnd="true"
+                android:textSize="26sp"
+                android:layout_marginRight="36dp"
+                android:layout_marginBottom="10dp"
+
+                />
+
+            <FrameLayout
+                android:id="@+id/plantListView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/headerBkg_border5">
+
+            </FrameLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+   </LinearLayout>
