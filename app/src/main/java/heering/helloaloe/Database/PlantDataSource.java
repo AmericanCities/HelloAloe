@@ -27,7 +27,8 @@ public class PlantDataSource {
             PlantDBhelper.COLUMN_ID,
             PlantDBhelper.COLUMN_PLANT_TYPE,
             PlantDBhelper.COLUMN_PLANT_NICKNAME,
-            PlantDBhelper.COLUMN_PLANT_SCHEDULE,
+            PlantDBhelper.COLUMN_PLANT_SUMMER_SCHEDULE,
+            PlantDBhelper.COLUMN_PLANT_WINTER_SCHEDULE,
             PlantDBhelper.COLUMN_PLANT_LASTWATERED,
             PlantDBhelper.COLUMN_IMAGE    };
 
@@ -49,7 +50,8 @@ public class PlantDataSource {
         ContentValues values = new ContentValues();
         values.put(PlantDBhelper.COLUMN_PLANT_TYPE, plant.getPlantType());
         values.put(PlantDBhelper.COLUMN_PLANT_NICKNAME, plant.getPlantNickName());
-        values.put(PlantDBhelper.COLUMN_PLANT_SCHEDULE, plant.getPlantSchedule());
+        values.put(PlantDBhelper.COLUMN_PLANT_SUMMER_SCHEDULE, plant.getSummerSchedule());
+        values.put(PlantDBhelper.COLUMN_PLANT_WINTER_SCHEDULE, plant.getWinterSchedule());
         values.put(PlantDBhelper.COLUMN_PLANT_LASTWATERED, plant.getPlantLastWatered());
         values.put(PlantDBhelper.COLUMN_IMAGE, plant.getPlantImage());
         long insertid = database.insert(PlantDBhelper.TABLE_PLANTS,null,values);
@@ -59,7 +61,6 @@ public class PlantDataSource {
 
     public void deletePlant(Long plantID){
         String whereClause = "plantID" + "=?";
-        String dbQuery = "SELECT * FROM plants WHERE plantID = ?";
         String[] whereArgs = new String[] { String.valueOf(plantID) };
         database.delete(PlantDBhelper.TABLE_PLANTS,whereClause,whereArgs);
     }
@@ -69,7 +70,8 @@ public class PlantDataSource {
         ContentValues values = new ContentValues();
         values.put(PlantDBhelper.COLUMN_PLANT_TYPE, plant.getPlantType());
         values.put(PlantDBhelper.COLUMN_PLANT_NICKNAME, plant.getPlantNickName());
-        values.put(PlantDBhelper.COLUMN_PLANT_SCHEDULE, plant.getPlantSchedule());
+        values.put(PlantDBhelper.COLUMN_PLANT_SUMMER_SCHEDULE, plant.getSummerSchedule());
+        values.put(PlantDBhelper.COLUMN_PLANT_WINTER_SCHEDULE, plant.getWinterSchedule());
         values.put(PlantDBhelper.COLUMN_PLANT_LASTWATERED, plant.getPlantLastWatered());
         values.put(PlantDBhelper.COLUMN_IMAGE, plant.getPlantImage());
         database.update(PlantDBhelper.TABLE_PLANTS,values,"plantId" + "="+plant.getPlantID(),null);
@@ -77,9 +79,17 @@ public class PlantDataSource {
     }
 
 
+    public void updatePlantLastWatered (long plantID, String date){
+        Log.i(LOGTAG, "Got to the db for plant ID: " + plantID + " date: " + date);
+        ContentValues values = new ContentValues();
+        values.put(PlantDBhelper.COLUMN_PLANT_LASTWATERED, date);
+        database.update(PlantDBhelper.TABLE_PLANTS,values,"plantId" + "="+plantID,null);
+    }
+
+
     public Plant getPlant (long plantID) {
         Plant gotPlant = new Plant();
-        Log.i(LOGTAG, "got here with plantID" + plantID);
+        Log.i(LOGTAG, "got here with plantID " + plantID);
         String dbQuery = "SELECT * FROM plants WHERE plantID = ?";
         String plantIDString = Long.toString(plantID);
         //dbQuery,null
@@ -88,7 +98,8 @@ public class PlantDataSource {
         if (c.getCount()>0  && c.moveToFirst()) {
             gotPlant.setPlantType(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)));
             gotPlant.setPlantNickName(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)));
-            gotPlant.setPlantSchedule(c.getInt(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SCHEDULE)));
+            gotPlant.setSummerSchedule(c.getInt(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SUMMER_SCHEDULE)));
+            gotPlant.setWinterSchedule(c.getInt(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_WINTER_SCHEDULE)));
             gotPlant.setPlantImage(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)));
             gotPlant.setPlantLastWatered(c.getString(c.getColumnIndex(PlantDBhelper.COLUMN_PLANT_LASTWATERED)));
             gotPlant.setPlantID(plantID);
@@ -133,7 +144,8 @@ public class PlantDataSource {
                 plant.setPlantID(cursor.getLong(cursor.getColumnIndex(PlantDBhelper.COLUMN_ID)));
                 plant.setPlantType(cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)));
                 plant.setPlantNickName(cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)));
-                plant.setPlantSchedule(cursor.getInt(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SCHEDULE)));
+                plant.setSummerSchedule(cursor.getInt(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SUMMER_SCHEDULE)));
+                plant.setWinterSchedule(cursor.getInt(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_WINTER_SCHEDULE)));
                 plant.setPlantLastWatered(cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_LASTWATERED)));
                 plant.setPlantImage(cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)));
                 plants.add(plant);

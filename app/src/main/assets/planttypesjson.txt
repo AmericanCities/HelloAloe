@@ -4,7 +4,8 @@
       "light":"moderate to bright",
 	  "image":"take_pciture_graphic",
       "soil":"peat moss-based potting-mix",
-      "water_schedule":7,
+      "summer_schedule":7,
+      "winter_schedule":7,
       "notes":"Soil should be moist. Drench and dry.  Wait for plant to droop"
     },
     {
@@ -12,7 +13,8 @@
      "light":"moderate to bright",
 	 "image":"peacelilly_rs",
      "soil":"peat moss-based potting-mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":12,
      "notes":"Soil should be moist. Drench and dry.  Wait for plant to droop"
    },
    {
@@ -20,7 +22,8 @@
      "light":"Bright Light",
 	 "image":"aloevera_rs",
      "soil":"cactus potting mix/1 part course sand with 2 parts potting-mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":18,
      "notes":"Once a week, every two weeks in winter.  Do not water if soil is wet "
    },
    {
@@ -28,7 +31,8 @@
      "light":"moderate to bright",
 	 "image":"spiderplant_rs",
      "soil":"any potting mix",
-     "water_schedule":4,
+     "summer_schedule":4,
+     "winter_schedule":7,
      "notes":"water if soil is dry an inch down"
    },
    {
@@ -36,7 +40,8 @@
      "light":"Bright light",
 	 "image":"gerberdaisy_rs",
      "soil":"peat moss-based potting-mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":12,
      "notes":"Drench and dry"
    },
    {
@@ -44,7 +49,8 @@
      "light":"moderate to bright",
 	 "image":"motherinlawstongue_rs",
      "soil":"cactus potting mix/1 part course sand with 2 parts potting-mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":20,
      "notes":"in winter only once a months.  Check 2 inches down for dry soil"
    },
    {
@@ -52,7 +58,8 @@
      "light":"Bright light",
 	 "image":"golden_pothos_rs",
      "soil":"loose well drained potting mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":14,
      "notes":"twice a week in winter"
    },
    {
@@ -60,7 +67,8 @@
      "light":"Bright Light",
 	 "image":"chrysanthemum_rs",
      "soil":"peat moss-based potitng mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":10,
      "notes":"keep moist at all times"
    },
    {
@@ -68,7 +76,8 @@
      "light":"moderate to bright",
 	 "image":"dracaena_rs",
      "soil":"loose well drained potting mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":7,
      "notes":"allow the plant to dry between watering"
    },
    {
@@ -76,7 +85,8 @@
      "light":"moderate to bright",
 	 "image":"englishivy_rs",
      "soil":"loose well drained potting mix",
-     "water_schedule":7,
+     "summer_schedule":7,
+     "winter_schedule":7,
      "notes":"Drench and dry"
    },
    {
@@ -84,7 +94,8 @@
      "light":"low light",
 	 "image":"chineseevergreen_rs",
      "soil":"potting mix",
-     "water_schedule":5,
+     "summer_schedule":5,
+     "winter_schedule":10,
      "notes":"soil should be moist. Drench and dry."
    },
    {
@@ -92,7 +103,8 @@
      "light":"moderate to bright",
 	 "image":"heartleafphilodendron_rs", 
 	 "soil":"peat moss-based potting-mix",
-     "water_schedule":6,
+     "summer_schedule":6,
+     "winter_schedule":12,
      "notes":"evenly moist"
    }
  ]

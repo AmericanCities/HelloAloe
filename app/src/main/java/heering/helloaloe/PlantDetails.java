@@ -33,10 +33,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import eu.janmuller.android.simplecropimage.CropImage;
 import heering.helloaloe.Database.PlantDataSource;
 import heering.helloaloe.JsonReader.JsonPlantReader;
+import heering.helloaloe.WaterNotification.AlarmMangerHelper;
 
 /**
  * Created by Matthew on 11/19/2014.
@@ -44,11 +44,10 @@ import heering.helloaloe.JsonReader.JsonPlantReader;
  * This section allows a user to add a plant
  *
  */
-public class PlantDetails extends Activity implements View.OnClickListener {
+public class PlantDetails extends Activity implements View.OnClickListener, AlarmMangerHelper {
 
     public static final String LOGTAG = "USERPLANTS";
     public EditText plantNickNameTXTMSG;
-    public int plantSched = 0;
     public TextView displayDPfDate;
     public PlantDataSource datasource;
     public Spinner spinner;
@@ -64,10 +63,13 @@ public class PlantDetails extends Activity implements View.OnClickListener {
     public ImageView cameraShot;
     public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public DatePickerFragment datePicker;
+    String plantWateredDate;
 
   // todo:  http://karanbalkar.com/2013/07/tutorial-41-using-alarmmanager-and-broadcastreceiver-in-android/
   // add Alarm notification
   // http://stackoverflow.com/questions/22705776/alarm-manager-broadcast-receiver-not-stopping
+  //todo: set window direction with compass (N,S,W,E) to determine light requirements
+
 
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -113,24 +115,22 @@ public class PlantDetails extends Activity implements View.OnClickListener {
                 Log.i(LOGTAG, "---------------------");
                 Log.i(LOGTAG, "Plant got with id " + knownPlant.getPlantID());
                 Log.i(LOGTAG, "The plant type is " + knownPlant.getPlantType());
-                Log.i(LOGTAG, "The plant schedule is " + knownPlant.getPlantSchedule());
+                Log.i(LOGTAG, "The plant schedule is " + knownPlant.getSummerSchedule());
                 Log.i(LOGTAG, "The last Watered date is " + knownPlant.getPlantLastWatered());
                 Log.i(LOGTAG, "The picture path is " + knownPlant.getPlantImage());
                 Log.i(LOGTAG, "---------------------");
 
-            String plantWateredDate = knownPlant.getPlantLastWatered();
+            plantWateredDate = knownPlant.getPlantLastWatered();
             int monthParsed = Integer.parseInt(plantWateredDate.substring(5,7));
             int dayParsed = Integer.parseInt(plantWateredDate.substring(8));
             displayDPfDate.setText(MONTHS[monthParsed - 1] + " " + dayParsed);
             Log.i(LOGTAG, "displayDPDate is: " +  MONTHS[monthParsed - 1] + " " + dayParsed);
-            plantSched= knownPlant.getPlantSchedule();
             deletePlant.setVisibility(View.VISIBLE);
             saveData.setText("update");
             workingPlant = knownPlant;
         }
         addListeners();
     }
-
 
     private void addListeners() {
         // spinner drop down listener
@@ -142,8 +142,11 @@ public class PlantDetails extends Activity implements View.OnClickListener {
                 if (plantSelection != null) {
                     plantType  = plantSelection.getPlantType();
                     workingPlant.setPlantType(plantType);
-                    plantSched = plantSelection.getPlantSchedule();
-                    workingPlant.setPlantSchedule(plantSched);
+                    int summerSched = plantSelection.getSummerSchedule();
+                    int winterSched = plantSelection.getWinterSchedule();
+                    workingPlant.setSummerSchedule(summerSched);
+                    workingPlant.setWinterSchedule(winterSched);
+
                     if (!photoTaken) {
                         String fileDrawable = plantSelection.getPlantImage();
                         filename = "android.resource://heering.helloaloe/drawable/" + fileDrawable;
@@ -235,6 +238,7 @@ public class PlantDetails extends Activity implements View.OnClickListener {
     }
 
 
+
    //---------------
    //Save Plant
    //---------------
@@ -249,14 +253,21 @@ public class PlantDetails extends Activity implements View.OnClickListener {
         datasource.open();
         if (newPlant){
             workingPlant = datasource.create(workingPlant);
+            //set alarm with context,plant object, true to set an alarm vs. cancel
+            SetAlarm.setAlarmManager(this,workingPlant.getPlantID(),true);
         }
         else {
             if (updatePlant) {
                 updateAction = "updated";
                 datasource.updatePlant(workingPlant);
-            }
+                if (!plantWateredDate.equals(workingPlant.getPlantLastWatered())){
+                   //set alarm with context,plant object, set new alarm (overwrites existing)
+                    SetAlarm.setAlarmManager(this,workingPlant.getPlantID(),true);
+                }}
             else {
                 updateAction = "deleted";
+                // cancel existing alarm
+                SetAlarm.setAlarmManager(this,workingPlant.getPlantID(),false);
                 datasource.deletePlant(workingPlant.getPlantID());
             }
         }
@@ -265,7 +276,8 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             Log.i(LOGTAG, "---------------------");
             Log.i(LOGTAG, "Plant " + updateAction + " with id " + workingPlant.getPlantID());
             Log.i(LOGTAG, "The plant type is " + plantType);
-            Log.i(LOGTAG, "The plant schedule is " + plantSched);
+            Log.i(LOGTAG, "The plant summer schedule is " + workingPlant.getSummerSchedule());
+            Log.i(LOGTAG, "The plant winter schedule is " + workingPlant.getWinterSchedule());
             Log.i(LOGTAG, "The last Watered date is " + workingPlant.getPlantLastWatered());
             Log.i(LOGTAG, "The picture path is " + workingPlant.getPlantImage());
             Log.i(LOGTAG, "---------------------");
@@ -416,4 +428,5 @@ public class PlantDetails extends Activity implements View.OnClickListener {
             displayDate.setText( MONTHS[month] + " " + day);
         }
     }
+
 }

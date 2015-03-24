@@ -31,49 +31,29 @@ import heering.helloaloe.R;
 
 //TODO: display progress bar in notificaiton when watering action occurs
 // example here: http://developer.android.com/guide/topics/ui/notifiers/notifications.html#BigNotify
-// http://stackoverflow.com/questions/4680396/android-remoteview-layout-is-not-working
-//for (incr = 0; incr <= 100; incr+=5) {
-//        // Sets the progress indicator to a max value, the
-//        // current completion percentage, and "determinate"
-//        // state
-//        mBuilder.setProgress(100, incr, false);
-//        // Displays the progress bar for the first time.
-//        mNotifyManager.notify(0, mBuilder.build());
-//        // Sleeps the thread, simulating an operation
-//        // that takes time
-//        try {
-//        // Sleep for 5 seconds
-//        Thread.sleep(5*1000);
-//        } catch (InterruptedException e) {
-//        Log.d(TAG, "sleep failure");
-//        }
-//        }
-
-
 // https://developer.android.com/training/scheduling/alarms.html
 // Need to register for reboot status - so as to reset alarms.
 // https://developer.android.com/reference/android/app/AlarmManager.html#RTC
 // http://developer.android.com/guide/topics/ui/notifiers/notifications.html
-// http://papers.ch/android-schedule-a-notification/
+//http://stackoverflow.com/questions/6522792/get-list-of-active-pendingintents-in-alarmmanager
 
 
 public class NotificationBroadcastReceiver extends BroadcastReceiver {
     private static final String LOGTAG = "USERPLANTS";
-    private static final int MAX_PROGRESS = 100;
-
-//    WaterButtonReceiver waterButtonListener = new WaterButtonReceiver();
-//    http://stackoverflow.com/questions/12438209/handling-buttons-inside-android-notifications
 
     @Override
     public void onReceive(Context context, Intent paramIntent) {
+        String message = paramIntent.getExtras().getString("message");
+        long plantID = paramIntent.getExtras().getLong("plantIdentifier");
+        Log.i(LOGTAG, "Got to the Broadcast Receiver and the message is: " + message + "and the plant id is: " + plantID);
+        int plantIDint = (int) (long) plantID;
 
         Intent waterIntent = new Intent(context, WaterButtonReceiver.class);
-        PendingIntent pendingWaterIntent = PendingIntent.getBroadcast(context, 0, waterIntent, 0);
+               waterIntent.putExtra("plantGetter", plantID);
+        PendingIntent pendingWaterIntent = PendingIntent.getBroadcast(context, 0, waterIntent,PendingIntent.FLAG_CANCEL_CURRENT);
 
-        String message = paramIntent.getExtras().getString("message");
-        Log.i(LOGTAG, "Got to the Broadcast Receiver and the message is: " + message);
+        // Request the notification manager.
 
-        // Request the notification manager
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Create a new intent which will be fired if you click on the notification
@@ -105,25 +85,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         noti.bigContentView.setProgressBar(R.id.progressBar, 0, 0, true);
         noti.bigContentView.setOnClickPendingIntent(R.id.notifyWaterButton,pendingWaterIntent);
         noti.bigContentView.setOnClickPendingIntent(R.id.notifyEditButton, headHome);
-        notificationManager.notify(4,noti);
-
-
-//        for (incr = 0; incr <= 100; incr+=5) {
-////        Sets the progress indicator to a max value, the
-////          current completion percentage, and "determinate"
-//          // state
-//          mBuilder.setProgress(100, incr, false);
-//          // Displays the progress bar for the first time.
-//          mNotifyManager.notify(0, mBuilder.build());
-//          // Sleeps the thread, simulating an operation
-//          // that takes time
-//            try {
-//            // Sleep for 5 seconds
-//            Thread.sleep(5*1000);
-//            } catch (InterruptedException e) {
-//            Log.d(TAG, "sleep failure");
-//            }
-//        }
+        notificationManager.notify(plantIDint,noti);
 
         // hide the notification after its selected
         noti.flags |= Notification.FLAG_AUTO_CANCEL;

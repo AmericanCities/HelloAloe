@@ -1,10 +1,10 @@
 package heering.helloaloe;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.ListFragment;
-import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,9 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Calendar;
 import heering.helloaloe.Database.PlantDataSource;
-import heering.helloaloe.WaterNotification.NotificationBroadcastReceiver;
+
 
 
 //@TODO update homescreen layout for Relative percentage view
@@ -25,12 +24,21 @@ import heering.helloaloe.WaterNotification.NotificationBroadcastReceiver;
 public class HomeScreen extends Activity implements View.OnClickListener {
 
     private static final String LOGTAG = "USERPLANTS";
-    private PendingIntent pendingIntent; // for testing notifications
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String SETSUMMER = "setSummer";
+
+    // private PendingIntent pendingIntent; // for testing notifications
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        boolean previouslyStarted= prefs.getBoolean(SETSUMMER,false);
+        if(!previouslyStarted){
+            startActivity(new Intent(HomeScreen.this,FirstLaunch.class));
+        }
         Log.i(LOGTAG,"And we are off and running");
+
         setContentView(R.layout.home_screen);
         Button addPlant = (Button)findViewById(R.id.addPlantbtn);
         if (addPlant != null)
@@ -41,25 +49,6 @@ public class HomeScreen extends Activity implements View.OnClickListener {
                     .replace(R.id.plantListView, new PlantListFragment())
                     .commit();
         }
-        //*****************************************************
-        //
-        //
-        // Testing Alarm Notification
-        Calendar calendar = Calendar.getInstance();
-        String message = "Heart-leaf Philodendron";
-        Log.i(LOGTAG,"Alarm in in Miliseconds: " + calendar.getTimeInMillis());
-
-        Intent alarmIntent = new Intent(HomeScreen.this, NotificationBroadcastReceiver.class);
-        alarmIntent.putExtra("message", message);
-
-        pendingIntent = PendingIntent.getBroadcast(HomeScreen.this, 0, alarmIntent, 0);
-
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-
-        //alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-        long time= System.currentTimeMillis();
-        //current time + 5 seconds
-        alarmManager.set(AlarmManager.RTC, time + 5000, pendingIntent);
     }
     public void onClick(View selectedView){
         if (selectedView.getId()== R.id.addPlantbtn){

@@ -8,9 +8,10 @@ public class Plant {
     private long plantID;
     private String plantType;
     private String plantNickName;
-    private int plantSchedule;
+    private int summerSchedule;
     private String plantLastWatered;
     private String plantImage;
+    private int winterSchedule;
 
     public long getPlantID() {
         return plantID;
@@ -44,12 +45,20 @@ public class Plant {
         this.plantNickName = plantNickName;
     }
 
-    public int getPlantSchedule() {
-        return plantSchedule;
+    public int getSummerSchedule() {
+        return summerSchedule;
     }
 
-    public void setPlantSchedule(int plantSchedule) {
-        this.plantSchedule = plantSchedule;
+    public void setSummerSchedule(int summerSchedule) {
+        this.summerSchedule = summerSchedule;
+    }
+
+    public int getWinterSchedule() {
+        return winterSchedule;
+    }
+
+    public void setWinterSchedule(int winterSchedule) {
+        this.winterSchedule = winterSchedule;
     }
 
     public String getPlantLastWatered() {
@@ -64,4 +73,5 @@ public class Plant {
     public String toString() {
         return this.plantType;
     }
+
 }

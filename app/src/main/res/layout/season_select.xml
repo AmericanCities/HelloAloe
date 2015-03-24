@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#75B8EF">
+
+
+
+
+    <TextView
+        android:id="@+id/headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/seasonScreenHeader"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:layout_marginRight="50sp"
+        android:layout_marginTop="25sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/introText"
+        android:text="@string/seasonIntro"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="91dp"
+        android:layout_below="@+id/headerText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="20sp" />
+
+    <TextView
+        android:id="@+id/winterStatement"
+        android:text="@string/winterStatement"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="20sp"
+        android:layout_below="@+id/introText"
+        android:layout_alignParentStart="true"
+        android:paddingTop="5sp" />
+
+    <TextView
+        android:id="@+id/seasonSelector"
+        android:text="@string/seasonSelector"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="20sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/continueButton"
+        android:text="@string/seasonContinue"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="30dp"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summerSelector"
+        android:src="@drawable/summer"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/seasonSelector"
+        android:layout_toStartOf="@+id/continueButton" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/winterSelector"
+        android:src="@drawable/winter"
+        android:layout_alignTop="@+id/summerSelector"
+        android:layout_alignStart="@+id/headerText" />
+
+
+</RelativeLayout>

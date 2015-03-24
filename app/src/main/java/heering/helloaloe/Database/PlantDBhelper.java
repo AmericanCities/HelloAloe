@@ -18,7 +18,8 @@ public class PlantDBhelper extends SQLiteOpenHelper{
     public static final String COLUMN_ID = "plantID";
     public static final String COLUMN_PLANT_TYPE = "plantType";
     public static final String COLUMN_PLANT_NICKNAME = "plantNickName";
-    public static final String COLUMN_PLANT_SCHEDULE = "plantSchedule";
+    public static final String COLUMN_PLANT_SUMMER_SCHEDULE = "plantSummerSchedule";
+    public static final String COLUMN_PLANT_WINTER_SCHEDULE = "plantWinterSchedule";
     public static final String COLUMN_PLANT_LASTWATERED = "plantLastWatered";
     public static final String COLUMN_IMAGE = "plantImage";
 
@@ -28,7 +29,8 @@ public class PlantDBhelper extends SQLiteOpenHelper{
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_PLANT_TYPE + " TEXT, " +
                     COLUMN_PLANT_NICKNAME + " TEXT, " +
-                    COLUMN_PLANT_SCHEDULE + " INT, " +
+                    COLUMN_PLANT_SUMMER_SCHEDULE + " INT, " +
+                    COLUMN_PLANT_WINTER_SCHEDULE + " INT, " +
                     COLUMN_PLANT_LASTWATERED + " TEXT, " +
                     COLUMN_IMAGE + " TEXT"
                     +  ")";

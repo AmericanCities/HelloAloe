@@ -18,12 +18,18 @@ import heering.helloaloe.R;
 /**
  * Created by Matt on 3/13/2015.
  */
-public class WaterButtonReceiver extends BroadcastReceiver {
+public class WaterButtonReceiver extends BroadcastReceiver implements AlarmMangerHelper {
     private static final String LOGTAG = "USERPLANTS";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(LOGTAG, "Got to the Water Receiver ");
+
+        long plantID = intent.getExtras().getLong("plantGetter");
+        Log.i(LOGTAG, "Got to the Water Receiver with plantID " + plantID);
+        final int plantIDint = (int) (long) plantID;
+
+        ChangeLastWateredDate.setAlarmManager(context,plantID);
+        SetAlarm.setAlarmManager(context,plantID,true);
 
         // Request the notification manager
         final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -53,8 +59,6 @@ public class WaterButtonReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .build();
 
-
-
         noti.bigContentView = customNotification;
         noti.bigContentView.setOnClickPendingIntent(R.id.notifyEditButton, headHome);
 
@@ -64,14 +68,14 @@ public class WaterButtonReceiver extends BroadcastReceiver {
                     @Override
                     public void run() {
                         int incr;
-                        // Do the "lengthy" operation 20 times
+                         // Do the "lengthy" operation 20 times
                         for (incr = 0; incr <= 15; incr+=1) {
                             // Sets the progress indicator to a max value, the
                             // current completion percentage, and "determinate"
                             // state
                             noti.bigContentView.setProgressBar(R.id.progressBar, 15, incr, false);
                             // Displays the progress bar for the first time.
-                            notificationManager.notify(4, noti);
+                            notificationManager.notify(plantIDint, noti);
                             // Sleeps the thread, simulating an operation
                             // that takes time
                             try {
@@ -82,19 +86,10 @@ public class WaterButtonReceiver extends BroadcastReceiver {
                             }
                         }
                         // When the loop is finished, updates the notification
-                        notificationManager.cancel(4);
+                        notificationManager.cancel(plantIDint);
                     }
                 }
-// Starts the thread by calling the run() method in its Runnable
+                // Starts the thread by calling the run() method in its Runnable
         ).start();
-
-
-
-
-        // Fire off logic to update the DB plant watering date
-
     }
-
-
-
     }
