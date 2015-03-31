@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,8 +29,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,8 +64,8 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
     public String plantType;
     public boolean photoTaken;
     public boolean newPlant;
-    public Button deletePlant;
-    public Button saveData;
+    public TextView deletePlant;
+    public TextView saveData;
     public ImageView cameraShot;
     public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public DatePickerFragment datePicker;
@@ -72,7 +78,7 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_details);
 
@@ -82,8 +88,8 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
         spinner = (Spinner) findViewById(R.id.spinnerPlantType);
         cameraShot = (ImageView) findViewById(R.id.takePicture);
         displayDPfDate = (TextView)findViewById(R.id.displayDPdate);
-        deletePlant = (Button) findViewById(R.id.deletePlant);
-        saveData = (Button) findViewById(R.id.savePlant);
+        deletePlant = (TextView) findViewById(R.id.deletePlant);
+        saveData = (TextView) findViewById(R.id.savePlant);
         datePicker = new DatePickerFragment(displayDPfDate);
 
         // hides keyboard on startup
@@ -146,6 +152,8 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
                     int winterSched = plantSelection.getWinterSchedule();
                     workingPlant.setSummerSchedule(summerSched);
                     workingPlant.setWinterSchedule(winterSched);
+                    if (!plantType.equals("Select Plant Type"))
+                        saveData.setVisibility(View.VISIBLE);
 
                     if (!photoTaken) {
                         String fileDrawable = plantSelection.getPlantImage();
@@ -168,6 +176,8 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
                 public void onClick(View v) {
                     //DatePickerFragment datePicker = new DatePickerFragment(displayDPfDate);
                     datePicker.show(getFragmentManager(), "datePicker");
+                    saveData.setVisibility(View.VISIBLE);
+
                 }
             });
         }
@@ -225,6 +235,7 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
     public void onClick(View selectedView) {
         if (selectedView.getId() == R.id.takePicture) {
             dispatchTakePictureIntent();
+            saveData.setVisibility(View.VISIBLE);
         }
         if (selectedView.getId() == R.id.savePlant) {
             Boolean updatePlant = true;
@@ -331,8 +342,9 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
             case REQUEST_TAKE_PHOTO:
                 runCropImage();
                 photoTaken = true;
+                setPic();
+                Log.i(LOGTAG, "The image path is: " + mCurrentPhotoPath);
                 workingPlant.setPlantImage(mCurrentPhotoPath);
-                cameraShot.setImageURI(Uri.parse(mCurrentPhotoPath));
                 break;
 
             case REQUEST_CODE_CROP_IMAGE:
@@ -342,12 +354,55 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
                    return;
                 }
                 // cropped bitmap
-                Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+
+               Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+               bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, false);
+
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(mCurrentPhotoPath);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out); // bmp is your Bitmap instance
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = cameraShot.getWidth();
+        int targetH = cameraShot.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        cameraShot.setImageBitmap(bitmap);
+    }
 
 
     private File createImageFile() throws IOException {

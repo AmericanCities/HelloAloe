@@ -49,13 +49,17 @@ public interface AlarmMangerHelper {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Log.i(LOGTAG, "last Watered was " + sdf.format(waterCal.getTime()));
 
-            if (summer) {
-                waterCal.add(Calendar.DAY_OF_YEAR, alarmPlant.getSummerSchedule());
-                Log.i(LOGTAG, "Applying Summer Schedule days: " + alarmPlant.getSummerSchedule());
-            } else {
-                waterCal.add(Calendar.DAY_OF_YEAR, alarmPlant.getWinterSchedule());
-                Log.i(LOGTAG, "Applying Winter Schedule days: " + alarmPlant.getWinterSchedule());
-            }
+            //If user has a winter and month is before April or after September water on winter scheudle
+            //else water on summer scheudle
+                if ((!summer)&& ((monthParsed < 4) || (monthParsed > 9))) {
+                    waterCal.add(Calendar.DAY_OF_YEAR, alarmPlant.getWinterSchedule());
+                    Log.i(LOGTAG, "Applying Winter Schedule days: " + alarmPlant.getWinterSchedule());
+                }
+                else {
+                    waterCal.add(Calendar.DAY_OF_YEAR, alarmPlant.getSummerSchedule());
+                    Log.i(LOGTAG, "Applying Summer Schedule days: " + alarmPlant.getSummerSchedule());
+               }
+
             waterCal.set(Calendar.HOUR_OF_DAY, 18);
             waterCal.set(Calendar.MINUTE, 0);
             waterCal.set(Calendar.SECOND, 0);

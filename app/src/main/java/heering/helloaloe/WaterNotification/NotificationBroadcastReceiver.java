@@ -30,7 +30,6 @@ import heering.helloaloe.R;
 // http://karanbalkar.com/2013/07/tutorial-41-using-alarmmanager-and-broadcastreceiver-in-android/
 
 //TODO: display progress bar in notificaiton when watering action occurs
-// example here: http://developer.android.com/guide/topics/ui/notifiers/notifications.html#BigNotify
 // https://developer.android.com/training/scheduling/alarms.html
 // Need to register for reboot status - so as to reset alarms.
 // https://developer.android.com/reference/android/app/AlarmManager.html#RTC

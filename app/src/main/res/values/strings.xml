@@ -14,7 +14,8 @@
     <string name="waterSchedule_dsc">Water Frequency</string>
     <string name="last_date_dsc">last watered</string>
     <string name="plantNameHint">enter plant type</string>
-    <string name="nicknameHint">plant name</string>
+    <string name="nicknameHint">plant nickname</string>
+    <string name="addPlantSubTitle">add details below</string>
     <string name="seasonIntro">Before we begin...</string>
     <string name="seasonContinue">continue</string>
     <string name="winterStatement">During winter, some plant species go dormant and require less watering.</string>

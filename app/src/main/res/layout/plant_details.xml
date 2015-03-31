@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/add_plant_container"
-    android:clickable="false">
+    android:clickable="true">
 
     <View
         android:id="@+id/headerBkgaddPlant"
@@ -54,12 +54,13 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayoutPic"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="150dp"
+        android:layout_height="170dp"
         android:layout_alignParentStart="true"
         android:layout_below="@id/headerBkgaddPlant_border2"
         android:background="#E0DCDA"
-        android:layout_margin="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp">
 
         <ImageView
             android:id="@+id/takePicture"
@@ -70,6 +71,7 @@
             android:contentDescription="image"
             android:scaleType="fitXY"
             android:padding ="10dp"
+            android:layout_marginBottom="10dp"
         />
 
         <ImageView
@@ -77,65 +79,136 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/camera_icon_png"
-
             android:layout_centerInParent="true"
-            android:paddingTop="75dp" />
-
+            android:paddingTop="65dp"
+         />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativeLayoutFields"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_toEndOf="@+id/relativeLayoutPic"
+        android:id="@+id/plantInfo"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:layout_alignTop="@+id/relativeLayoutPic"
-        android:src="@drawable/camera_icon_png"
-        >
+        android:layout_toEndOf="@+id/relativeLayoutPic">
 
-        <Spinner
-            android:id="@+id/spinnerPlantType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"  />
+    <TextView
+        android:id="@+id/plantSubTitle"
+        android:text="@string/addPlantSubTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:clickable="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="false"
+        android:textColor="#466E8F"
+        android:paddingLeft="11dp" />
 
-        <EditText
-            android:id="@+id/plantNickNameET"
-            android:hint="@string/nicknameHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spinnerPlantType"
-            android:layout_alignStart="@+id/spinnerPlantType" />
+    <View android:id="@+id/strut1"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/plantSubTitle"
+    />
+
+
+     <Spinner
+        android:id="@+id/spinnerPlantType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/strut1"
+      />
+
+    <View android:id="@+id/strut2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/spinnerPlantType"
+        />
+
+
+    <EditText
+        android:id="@+id/plantNickNameET"
+        android:hint="@string/nicknameHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/strut2"
+        android:imeActionLabel="Done"
+        android:singleLine="true"
+        android:layout_marginLeft="5dp"
+        android:paddingLeft="5dp" />
+
+     <View android:id="@+id/strut3"
+        android:layout_width="75dp"
+        android:layout_height="15dp"
+        android:layout_below="@+id/plantNickNameET"
+        />
+
+     <TextView
+        android:id="@+id/displayDPdate"
+        android:text="@string/last_date_dsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginLeft="-30dp"
+        android:clickable="true"
+        android:layout_below="@+id/strut3"
+        android:layout_toEndOf="@+id/strut3" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:layout_alignTop="@+id/displayDPdate"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/wateringcan"
+        android:layout_toStartOf="@+id/displayDPdate"
+        android:layout_alignBottom="@+id/displayDPdate"
+        android:layout_marginLeft="-30dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/relativeLayoutPic">
+
+        <View android:id="@+id/strut4"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+         />
 
 
         <TextView
-            android:id="@+id/displayDPdate"
-            android:text="@string/last_date_dsc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/plantNickNameET"
-            android:layout_alignStart="@+id/plantNickNameET"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:clickable="true" />
-
-        <Button
             android:id="@+id/savePlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="add plant"
-            android:layout_below="@+id/displayDPdate"
-            android:layout_centerHorizontal="true" />
+            android:text="save plant"
+            android:textColor="#D35D29"
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/strut4"
+            android:visibility="invisible" />
 
-        <Button
+        <View android:id="@+id/strut5"
+            android:layout_width="96dp"
+            android:layout_height="10dp"
+            android:layout_toEndOf="@+id/savePlant"
+         />
+
+        <TextView
             android:id="@+id/deletePlant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="delete"
-            android:layout_alignTop="@+id/savePlant"
-            android:layout_toStartOf="@+id/savePlant"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_alignRight="@+id/strut5"
+            android:textSize="18sp"
+            android:textColor="#D35D29"
+            android:layout_below="@+id/strut4"
+         />
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+
 
 </RelativeLayout>
