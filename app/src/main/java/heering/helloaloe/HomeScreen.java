@@ -88,7 +88,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             dbHelper = new PlantDataSource(getActivity());
-            plantItems = dbHelper.getListItems();
+            plantItems = dbHelper.getListItems(getActivity().getApplicationContext());
             adapter = new ListViewPlantAdapter(getActivity(), plantItems);
 
             // initialize and set the list adapter
@@ -99,7 +99,7 @@ public class HomeScreen extends Activity implements View.OnClickListener {
               super.onResume();
               Log.i(LOGTAG,"And we are Resuming");
               plantItems.clear();
-              plantItems.addAll(dbHelper.getListItems());
+              plantItems.addAll(dbHelper.getListItems(getActivity().getApplicationContext()));
               adapter.notifyDataSetChanged();
               //http://stackoverflow.com/questions/14503006/android-listview-not-refreshing-after-notifydatasetchanged
      }

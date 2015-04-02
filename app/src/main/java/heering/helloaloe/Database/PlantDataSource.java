@@ -6,11 +6,14 @@ package heering.helloaloe.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import heering.helloaloe.ListViewItem;
@@ -22,6 +25,9 @@ public class PlantDataSource {
     public static final String LOGTAG = "USERPLANTS";
     SQLiteOpenHelper dbhelper;
     SQLiteDatabase database;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String ALLSSUMMER = "endlessSummer";
+    public static final String SETSUMMER = "setSummer";
 
     private static final String[] allColumns = {
             PlantDBhelper.COLUMN_ID,
@@ -109,21 +115,64 @@ public class PlantDataSource {
     }
 
 
-    public ArrayList getListItems(){
+    public ArrayList getListItems(Context context){
         open();
         ArrayList plantList = new ArrayList<ListViewItem>();
+
         Cursor cursor = database.query(PlantDBhelper.TABLE_PLANTS,allColumns,
                 null,null,null,null,null);
         Log.i(LOGTAG, "Returned from db " + cursor.getCount() + " rows");
-
+        int water=0;
+        String lastWatered;
+        int summerWater;
+        int winterWater;
         if (cursor.getCount()>0) {
             while (cursor.moveToNext()){
+                // Figure out when the next date to water based on last watering and plant schedule
+                // This is way too much code! :(
+                lastWatered = cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_LASTWATERED));
+                summerWater = Integer.parseInt(cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_SUMMER_SCHEDULE)));
+                winterWater = Integer.parseInt(cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_WINTER_SCHEDULE)));
+
+                Calendar nextWateringCal = Calendar.getInstance();
+                //YYYY-MM-DD
+                int monthParsed = Integer.parseInt(lastWatered.substring(5, 7)) - 1;
+                int dayParsed = Integer.parseInt(lastWatered.substring(8));
+                int yearParesed = Integer.parseInt(lastWatered.substring(0, 4));
+
+                nextWateringCal.set(yearParesed, monthParsed, dayParsed);
+                nextWateringCal.set(Calendar.HOUR_OF_DAY, 0);
+                nextWateringCal.set(Calendar.MINUTE, 0);
+                nextWateringCal.set(Calendar.SECOND, 0);
+
+                SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, context.MODE_PRIVATE);
+                boolean summer = prefs.getBoolean(ALLSSUMMER,false);
+                if ((!summer)&& ((monthParsed < 4) || (monthParsed > 9))) {
+                    nextWateringCal.add(Calendar.DAY_OF_YEAR, winterWater);
+                }
+                else {
+                    nextWateringCal.add(Calendar.DAY_OF_YEAR, summerWater);
+                }
+
+                long nextWaterTime = nextWateringCal.getTimeInMillis();
+                Date nxtW = new Date(nextWaterTime);
+
+                Calendar todayDate = Calendar.getInstance();
+                todayDate.set(Calendar.HOUR_OF_DAY, 0);
+                todayDate.set(Calendar.MINUTE, 0);
+                todayDate.set(Calendar.SECOND, 0);
+                long todayTime = todayDate.getTimeInMillis();
+                Date tdy = new Date(todayTime);
+                int remainingDays = (int)((nxtW.getTime()-tdy.getTime())/(1000 * 60 * 60 * 24));
+
                 plantList.add(new ListViewItem(
                          cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_TYPE)),
                          cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_PLANT_NICKNAME)),
                          cursor.getString(cursor.getColumnIndex(PlantDBhelper.COLUMN_IMAGE)),
-                          cursor.getLong(cursor.getColumnIndex(PlantDBhelper.COLUMN_ID))));
-            }
+                         cursor.getLong(cursor.getColumnIndex(PlantDBhelper.COLUMN_ID)),
+                         remainingDays));
+                }
+
         }
         Log.i(LOGTAG, "Created plantList for ListView with " + plantList.size());
         close();

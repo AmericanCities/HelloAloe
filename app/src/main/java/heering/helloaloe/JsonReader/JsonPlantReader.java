@@ -44,12 +44,24 @@ public class JsonPlantReader {
                 Plant plant = new Plant();
                 String jsplantName = jsonPlant.getString("plant_type");
                 plant.setPlantType(jsplantName);
+
+                String lightType = jsonPlant.getString("light");
+                plant.setLight(lightType);
+
                 String plantImage = jsonPlant.getString("image");
                 plant.setPlantImage(plantImage);
+
+                String soilType = jsonPlant.getString("soil");
+                plant.setSoilType(soilType);
+
                 int summerSchedule = Integer.parseInt(jsonPlant.getString("summer_schedule"));
                 plant.setSummerSchedule(summerSchedule);
                 int winterSchedule = Integer.parseInt(jsonPlant.getString("winter_schedule"));
                 plant.setWinterSchedule(winterSchedule);
+
+                String waterDes = jsonPlant.getString("water");
+                plant.setWaterDes(waterDes);
+
                 preDefinedPlants.add(plant);
             }
         } catch (JSONException e) {

@@ -38,6 +38,7 @@ public class ListViewPlantAdapter extends ArrayAdapter<ListViewItem> {
             viewHolder.plantImage = (ImageView) convertView.findViewById(R.id.plantImage);
             viewHolder.plantType = (TextView) convertView.findViewById(R.id.plantType);
             viewHolder.plantNickName = (TextView) convertView.findViewById(R.id.plantNickName);
+            viewHolder.plantWater = (TextView) convertView.findViewById(R.id.waterLeft);
             convertView.setTag(viewHolder);
         } else {
             // recycle the already inflated view
@@ -48,6 +49,11 @@ public class ListViewPlantAdapter extends ArrayAdapter<ListViewItem> {
         ListViewItem item = getItem(position);
         viewHolder.plantType.setText(item.plantType);
         viewHolder.plantNickName.setText(item.plantNickName);
+        if (item.plantWater <=0){
+            viewHolder.plantWater.setText("Your plant may need water now");
+        }
+        else
+            viewHolder.plantWater.setText(item.plantWater + " days until watering");
         viewHolder.plantImage.setImageURI(Uri.parse(item.plantImage));
         return convertView;
     }
@@ -56,6 +62,7 @@ public class ListViewPlantAdapter extends ArrayAdapter<ListViewItem> {
         ImageView plantImage;
         TextView plantType;
         TextView plantNickName;
+        TextView plantWater;
     }
 
     private static class UpdateList{

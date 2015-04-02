@@ -1,12 +1,16 @@
 package heering.helloaloe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,6 +29,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,7 +75,11 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
     public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public DatePickerFragment datePicker;
     String plantWateredDate;
-
+    public Boolean updatePlant;
+    public RelativeLayout windowView;
+    public RelativeLayout waterView;
+    public RelativeLayout soilView;
+    public RelativeLayout tipsView;
 
   // add Alarm notification
   // http://stackoverflow.com/questions/22705776/alarm-manager-broadcast-receiver-not-stopping
@@ -91,7 +100,10 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
         deletePlant = (TextView) findViewById(R.id.deletePlant);
         saveData = (TextView) findViewById(R.id.savePlant);
         datePicker = new DatePickerFragment(displayDPfDate);
-
+        windowView = (RelativeLayout) findViewById(R.id.windowStats);
+        waterView = (RelativeLayout) findViewById(R.id.waterStats);
+        soilView = (RelativeLayout) findViewById(R.id.soilStats);
+        tipsView = (RelativeLayout) findViewById(R.id.tipsWindow);
         // hides keyboard on startup
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -152,9 +164,18 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
                     int winterSched = plantSelection.getWinterSchedule();
                     workingPlant.setSummerSchedule(summerSched);
                     workingPlant.setWinterSchedule(winterSched);
-                    if (!plantType.equals("Select Plant Type"))
-                        saveData.setVisibility(View.VISIBLE);
+                    String soilType = plantSelection.getSoilType();
+                    workingPlant.setSoilType(soilType);
+                    String lightType = plantSelection.getLightType();
+                    workingPlant.setLight(lightType);
+                    String waterDesc= plantSelection.getWaterDes();
+                    workingPlant.setWaterDes(waterDesc);
 
+                    if (!plantType.equals("Select Plant Type")) {
+                        saveData.setVisibility(View.VISIBLE);
+                        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                            setTips();
+                    }
                     if (!photoTaken) {
                         String fileDrawable = plantSelection.getPlantImage();
                         String filename = "android.resource://heering.helloaloe/drawable/" + fileDrawable;
@@ -194,6 +215,55 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
         //Delete Plant button listener
         if (deletePlant != null)
             deletePlant.setOnClickListener(this);
+    }
+
+
+    private void setTips(){
+        waterView.setVisibility(View.VISIBLE);
+        soilView.setVisibility(View.VISIBLE);
+        windowView.setVisibility(View.VISIBLE);
+        tipsView.setVisibility(View.VISIBLE);
+
+        // Set views
+        TextView windowTit = (TextView) findViewById(R.id.lightTitle);
+        TextView window1Txt = (TextView) findViewById(R.id.window1);
+        TextView window1Dsc = (TextView) findViewById(R.id.dimens1);
+        TextView window2Txt = (TextView) findViewById(R.id.window2);
+        TextView window2Dsc = (TextView) findViewById(R.id.dimens2);
+        TextView window3Txt = (TextView) findViewById(R.id.window3);
+        TextView window3Dsc = (TextView) findViewById(R.id.dimens3);
+        TextView waterDscTxt = (TextView) findViewById(R.id.waterTxt);
+        TextView soilTxt = (TextView) findViewById(R.id.soilDesc);
+
+        waterDscTxt.setText(workingPlant.getWaterDes());
+        soilTxt.setText(workingPlant.getSoilType());
+        //set windows
+        String lightType = workingPlant.getLightType();
+        if (lightType.equals("low")){
+            windowTit.setText("Low Light");
+            window1Txt.setText("North");
+            window1Dsc.setText("1 - 3 ft");
+            window2Txt.setText("East/West");
+            window2Dsc.setText("2 - 10 ft");
+            window3Txt.setText("South");
+            window3Dsc.setText("15 - 20 ft");
+        }
+        else if (lightType.equals("medium")){
+            windowTit.setText("Medium Light");
+            window1Txt.setText("North");
+            window1Dsc.setText("0 ft");
+            window2Txt.setText("East/West");
+            window2Dsc.setText("1 - 3 ft");
+            window3Txt.setText("South");
+            window3Dsc.setText("3 - 10 ft");
+        }
+        else {
+                windowTit.setText("High Light");
+                window1Txt.setText("East/West");
+                window1Dsc.setText("0 ft");
+                window2Txt.setText("South");
+                window2Dsc.setText("2 - 5 ft");
+        }
     }
 
     private void populateSpinner(){
@@ -243,8 +313,11 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
         }
 
         if (selectedView.getId() == R.id.deletePlant) {
-            Boolean updatePlant = false;
-            saveUpdateDeletePlant(updatePlant);
+            //
+            AlertDFragment alertdFragment = new AlertDFragment();
+            // Show Alert DialogFragment
+            alertdFragment.show(getFragmentManager(), "Alert Dialog Fragment");
+
         }
     }
 
@@ -481,5 +554,36 @@ public class PlantDetails extends Activity implements View.OnClickListener, Alar
             displayDate.setText( MONTHS[month] + " " + day);
         }
     }
+
+
+    public class AlertDFragment extends DialogFragment {
+        //http://www.androidbegin.com/tutorial/android-dialogfragment-tutorial/
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    // Set Dialog Icon
+                    .setIcon(R.drawable.plantdelete)
+                            // Set Dialog Title
+                    .setTitle("delete?")
+                            // Set Dialog Message
+                    //.setMessage("Alert DialogFragment Tutorial")
+
+                            // Positive button
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Boolean updatePlant = false;
+                            saveUpdateDeletePlant(updatePlant);
+                        }
+                    })
+
+                            // Negative Button
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,	int which) {
+                            // Do something else
+                        }
+                    }).create();
+        }
+    }
+
 
 }

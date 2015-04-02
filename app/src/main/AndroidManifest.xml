@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="heering.helloaloe" >
+    package="heering.helloaloe">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -14,30 +14,30 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
 
-        <receiver
-            android:label="Aloe says Hello"
-            android:name=".Widgetry.MyWidgetProvider" >
+        <!--<receiver-->
+            <!--android:label="Aloe says Hello"-->
+            <!--android:name=".Widgetry.MyWidgetProvider" >-->
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider" />
+            <!--<meta-data-->
+                <!--android:name="android.appwidget.provider"-->
+                <!--android:resource="@xml/appwidget_provider" />-->
 
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-        </receiver>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <receiver android:name=".Widgetry.MyWidgetBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".Widgetry.MyWidgetBroadcastReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.TIMEZONE_CHANGED" />-->
+                <!--<action android:name="android.intent.action.TIME_SET" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <service android:name=".Widgetry.WidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false">
-        </service>
+        <!--<service android:name=".Widgetry.WidgetService"-->
+            <!--android:permission="android.permission.BIND_REMOTEVIEWS"-->
+            <!--android:exported="false">-->
+        <!--</service>-->
 
         <activity
             android:name="heering.helloaloe.HomeScreen"

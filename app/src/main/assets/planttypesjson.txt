@@ -1,110 +1,110 @@
 "plants" :[
    {
       "plant_type":"Select Plant Type",
-      "light":"moderate to bright",
+      "light":" ",
 	  "image":"take_pciture_graphic",
       "soil":"peat moss-based potting-mix",
       "summer_schedule":7,
       "winter_schedule":7,
-      "notes":"Soil should be moist. Drench and dry.  Wait for plant to droop"
+      "water":" "
     },
     {
      "plant_type":"Peace Lily",
-     "light":"moderate to bright",
+     "light":"low",
 	 "image":"peacelilly_rs",
      "soil":"peat moss-based potting-mix",
      "summer_schedule":7,
      "winter_schedule":12,
-     "notes":"Soil should be moist. Drench and dry.  Wait for plant to droop"
+     "water":"Soil should be moist. Drench and dry. You can wait for plant to droop before watering."
    },
    {
      "plant_type":"Aloe Vera",
-     "light":"Bright Light",
+     "light":"high",
 	 "image":"aloevera_rs",
-     "soil":"cactus potting mix/1 part course sand with 2 parts potting-mix",
+     "soil":"cactus potting mix",
      "summer_schedule":7,
      "winter_schedule":18,
-     "notes":"Once a week, every two weeks in winter.  Do not water if soil is wet "
+     "water":"Soil should be dry to the touch before watering."
    },
    {
-     "plant_type":"Spider plant",
-     "light":"moderate to bright",
+     "plant_type":"Spider Plant",
+     "light":"medium",
 	 "image":"spiderplant_rs",
      "soil":"any potting mix",
      "summer_schedule":4,
      "winter_schedule":7,
-     "notes":"water if soil is dry an inch down"
+     "water":"Water if the soil is dry an inch down."
    },
    {
      "plant_type":"Gerbera Daisy",
-     "light":"Bright light",
+     "light":"high",
 	 "image":"gerberdaisy_rs",
      "soil":"peat moss-based potting-mix",
      "summer_schedule":7,
      "winter_schedule":12,
-     "notes":"Drench and dry"
+     "water":"Drench and dry."
    },
    {
-     "plant_type":"Mother-in-law's tongue",
-     "light":"moderate to bright",
+     "plant_type":"Snake Plant",
+     "light":"low",
 	 "image":"motherinlawstongue_rs",
-     "soil":"cactus potting mix/1 part course sand with 2 parts potting-mix",
+     "soil":"cactus potting mix",
      "summer_schedule":7,
      "winter_schedule":20,
-     "notes":"in winter only once a months.  Check 2 inches down for dry soil"
+     "water":"Check 2 inches below for dry soil before watering."
    },
    {
-     "plant_type":"golden pothos",
-     "light":"Bright light",
+     "plant_type":"Pothos",
+     "light":"low",
 	 "image":"golden_pothos_rs",
      "soil":"loose well drained potting mix",
      "summer_schedule":7,
      "winter_schedule":14,
-     "notes":"twice a week in winter"
+     "water":"Soil should be moist, but don't over water."
    },
    {
      "plant_type":"Chrysanthemum",
-     "light":"Bright Light",
+     "light":"high",
 	 "image":"chrysanthemum_rs",
      "soil":"peat moss-based potitng mix",
      "summer_schedule":7,
      "winter_schedule":10,
-     "notes":"keep moist at all times"
+     "water":"Water when 1 to 1 1/2 inch of soil feels dry."
    },
    {
-     "plant_type":"dracaena",
-     "light":"moderate to bright",
+     "plant_type":"Dracaena",
+     "light":"medium",
 	 "image":"dracaena_rs",
      "soil":"loose well drained potting mix",
      "summer_schedule":7,
      "winter_schedule":7,
-     "notes":"allow the plant to dry between watering"
+     "water":"Allow the soil to dry between waterings."
    },
    {
      "plant_type":"English Ivy",
-     "light":"moderate to bright",
+     "light":"high",
 	 "image":"englishivy_rs",
      "soil":"loose well drained potting mix",
      "summer_schedule":7,
      "winter_schedule":7,
-     "notes":"Drench and dry"
+     "water":"Soil should be dry to the touch. Drench and dry."
    },
    {
      "plant_type":"Chinese Evergreen",
-     "light":"low light",
+     "light":"low",
 	 "image":"chineseevergreen_rs",
      "soil":"potting mix",
      "summer_schedule":5,
      "winter_schedule":10,
-     "notes":"soil should be moist. Drench and dry."
+     "water":"Soil should be moist. Drench and dry."
    },
    {
      "plant_type":"Heart-leaf Philodendron",
-     "light":"moderate to bright",
+     "light":"low",
 	 "image":"heartleafphilodendron_rs", 
 	 "soil":"peat moss-based potting-mix",
      "summer_schedule":6,
      "winter_schedule":12,
-     "notes":"evenly moist"
+     "water":"Soil should be kept evenly moist."
    }
  ]

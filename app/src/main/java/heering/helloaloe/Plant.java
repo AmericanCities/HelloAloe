@@ -12,6 +12,9 @@ public class Plant {
     private String plantLastWatered;
     private String plantImage;
     private int winterSchedule;
+    private String soilType;
+    private String lightType;
+    private String waterDes;
 
     public long getPlantID() {
         return plantID;
@@ -74,4 +77,27 @@ public class Plant {
         return this.plantType;
     }
 
+    public String getSoilType(){
+        return soilType;
+    }
+
+    public void setSoilType(String soilType) {
+        this.soilType = soilType;
+    }
+
+    public void setLight(String light) {
+        this.lightType = light;
+    }
+
+    public String getLightType(){
+        return lightType;
+    }
+
+    public void setWaterDes(String waterDes) {
+        this.waterDes = waterDes;
+    }
+
+    public String getWaterDes(){
+        return waterDes;
+    }
 }
